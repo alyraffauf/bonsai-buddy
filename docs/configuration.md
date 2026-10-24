@@ -27,14 +27,14 @@ rewrites with a reused prefix. DFlash2 was slower on prose and cold prompts in t
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `BONSAI_PORT` | `8080` | Listening port on `127.0.0.1` |
-| `BONSAI_CTX` | Profile context | Context capacity in tokens |
-| `BONSAI_KV_TYPE` | Profile KV format | Key and value cache format, such as `f16` or `q8_0` |
-| `BONSAI_THINK_TOKENS` | `1024` | Generated reasoning-token budget |
-| `BONSAI_MAX_TOKENS` | Profile output limit | Total generated output-token limit |
-| `BONSAI_CACHE_MB` | `1024` | Host prompt-cache capacity in MiB |
-| `BONSAI_GPU_RESERVE_MB` | `512` for 9B, `256` for 27B | Additional VRAM reserve in MiB |
-| `BONSAI_MODELS_DIR` | Cache path below | Directory for model and projector files |
+| `BONSAI_BUDDY_PORT` | `8080` | Listening port on `127.0.0.1` |
+| `BONSAI_BUDDY_CTX` | Profile context | Context capacity in tokens |
+| `BONSAI_BUDDY_KV_TYPE` | Profile KV format | Key and value cache format, such as `f16` or `q8_0` |
+| `BONSAI_BUDDY_THINK_TOKENS` | `1024` | Generated reasoning-token budget |
+| `BONSAI_BUDDY_MAX_TOKENS` | Profile output limit | Total generated output-token limit |
+| `BONSAI_BUDDY_CACHE_MB` | `1024` | Host prompt-cache capacity in MiB |
+| `BONSAI_BUDDY_GPU_RESERVE_MB` | `512` for 9B, `256` for 27B | Additional VRAM reserve in MiB |
+| `BONSAI_BUDDY_MODELS_DIR` | Cache path below | Directory for model and projector files |
 | `HSA_OVERRIDE_GFX_VERSION` | `10.3.0` | ROCm architecture override |
 
 Explicit values for `HSA_OVERRIDE_GFX_VERSION`, including an empty value, pass through
@@ -44,13 +44,13 @@ with other cards depends on the host driver and the pinned ROCm kernels.
 For a smaller context on a memory-constrained GPU:
 
 ```sh
-BONSAI_CTX=8192 nix run .#27b
+BONSAI_BUDDY_CTX=8192 nix run .#27b
 ```
 
 For a different port and a larger thinking budget:
 
 ```sh
-BONSAI_PORT=8081 BONSAI_THINK_TOKENS=4096 nix run .#9b
+BONSAI_BUDDY_PORT=8081 BONSAI_BUDDY_THINK_TOKENS=4096 nix run .#9b
 ```
 
 Arguments after `--` pass to `llama-server` after the profile defaults:
@@ -64,9 +64,9 @@ nix run .#9b -- --help
 
 The cache directory follows this precedence:
 
-1. `BONSAI_MODELS_DIR`, when nonempty.
-2. `$XDG_CACHE_HOME/bonsaid/models`, when `XDG_CACHE_HOME` is nonempty.
-3. `$HOME/.cache/bonsaid/models`.
+1. `BONSAI_BUDDY_MODELS_DIR`, when nonempty.
+2. `$XDG_CACHE_HOME/bonsai-buddy/models`, when `XDG_CACHE_HOME` is nonempty.
+3. `$HOME/.cache/bonsai-buddy/models`.
 
 New downloads use temporary files, pass a pinned SHA-256 check, and move into the
 cache after verification. Existing nonempty files are reused. Removing a cached

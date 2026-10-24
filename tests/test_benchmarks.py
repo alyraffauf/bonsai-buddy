@@ -18,16 +18,21 @@ from task import CodingTask
 class CacheTests(unittest.TestCase):
     def test_environment_precedence(self):
         with patch.dict(
-            os.environ, {"BONSAI_MODELS_DIR": "/models", "XDG_CACHE_HOME": "/cache"}
+            os.environ,
+            {"BONSAI_BUDDY_MODELS_DIR": "/models", "XDG_CACHE_HOME": "/cache"},
         ):
             self.assertEqual(default_models_directory(), Path("/models"))
         with patch.dict(
-            os.environ, {"BONSAI_MODELS_DIR": "", "XDG_CACHE_HOME": "/cache"}
+            os.environ, {"BONSAI_BUDDY_MODELS_DIR": "", "XDG_CACHE_HOME": "/cache"}
         ):
-            self.assertEqual(default_models_directory(), Path("/cache/bonsaid/models"))
-        with patch.dict(os.environ, {"BONSAI_MODELS_DIR": "", "XDG_CACHE_HOME": ""}):
             self.assertEqual(
-                default_models_directory(), Path.home() / ".cache/bonsaid/models"
+                default_models_directory(), Path("/cache/bonsai-buddy/models")
+            )
+        with patch.dict(
+            os.environ, {"BONSAI_BUDDY_MODELS_DIR": "", "XDG_CACHE_HOME": ""}
+        ):
+            self.assertEqual(
+                default_models_directory(), Path.home() / ".cache/bonsai-buddy/models"
             )
 
 
@@ -102,7 +107,7 @@ class ServerTests(unittest.TestCase):
                         sys.executable,
                         str(scripts / script),
                         "--server",
-                        "/nonexistent/bonsaid-test-server",
+                        "/nonexistent/bonsai-buddy-test-server",
                         "--case",
                         "9b-plain",
                         "--output",

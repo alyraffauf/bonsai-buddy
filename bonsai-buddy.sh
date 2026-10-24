@@ -27,7 +27,7 @@ model_file="@modelFile@"
 model_sha256="@modelSha256@"
 draft_file="@draftFile@"
 speculative_arguments=( @extraArgs@ )
-model_directory="${BONSAI_MODELS_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bonsaid/models}"
+model_directory="${BONSAI_BUDDY_MODELS_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bonsai-buddy/models}"
 model_repository="https://huggingface.co/prism-ml/$model_name-gguf/resolve/main"
 projector_file="$model_name-mmproj-Q8_0.gguf"
 mkdir -p "$model_directory"
@@ -63,9 +63,9 @@ if [[ -n "$draft_file" ]]; then
   speculative_arguments+=(--model-draft "$model_directory/$draft_file")
 fi
 
-fit_target="${BONSAI_GPU_RESERVE_MB:-@gpuReserveMb@}"
+fit_target="${BONSAI_BUDDY_GPU_RESERVE_MB:-@gpuReserveMb@}"
 if [[ ! "$fit_target" =~ ^[0-9]+$ ]]; then
-  echo 'BONSAI_GPU_RESERVE_MB must be a nonnegative integer.' >&2
+  echo 'BONSAI_BUDDY_GPU_RESERVE_MB must be a nonnegative integer.' >&2
   exit 2
 fi
 # HIP reports memory available to its allocator without subtracting desktop VRAM.
@@ -85,15 +85,15 @@ exec @llamaServer@ \
   --model "$model_directory/$model_file" \
   --mmproj "$model_directory/$projector_file" \
   --no-mmproj-offload --image-max-tokens 1024 \
-  --host 127.0.0.1 --port "${BONSAI_PORT:-8080}" --cors-origins localhost \
+  --host 127.0.0.1 --port "${BONSAI_BUDDY_PORT:-8080}" --cors-origins localhost \
   --alias "bonsai2:$model_size" \
-  --ctx-size "${BONSAI_CTX:-@contextTokens@}" --parallel 1 \
-  --cache-type-k "${BONSAI_KV_TYPE:-@kvType@}" --cache-type-v "${BONSAI_KV_TYPE:-@kvType@}" \
-  --reasoning-format deepseek --reasoning-budget "${BONSAI_THINK_TOKENS:-1024}" \
+  --ctx-size "${BONSAI_BUDDY_CTX:-@contextTokens@}" --parallel 1 \
+  --cache-type-k "${BONSAI_BUDDY_KV_TYPE:-@kvType@}" --cache-type-v "${BONSAI_BUDDY_KV_TYPE:-@kvType@}" \
+  --reasoning-format deepseek --reasoning-budget "${BONSAI_BUDDY_THINK_TOKENS:-1024}" \
   --reasoning-budget-message $'\nI have enough information. I will now give the final answer or next tool call.\n' \
-  --n-predict "${BONSAI_MAX_TOKENS:-@maxTokens@}" \
+  --n-predict "${BONSAI_BUDDY_MAX_TOKENS:-@maxTokens@}" \
   --fit on --fit-target "$fit_target" --flash-attn on \
-  --batch-size @batchSize@ --ubatch-size @ubatchSize@ --cache-ram "${BONSAI_CACHE_MB:-1024}" \
+  --batch-size @batchSize@ --ubatch-size @ubatchSize@ --cache-ram "${BONSAI_BUDDY_CACHE_MB:-1024}" \
   --ctx-checkpoints 32 --cache-prompt \
   --temp 1.0 --top-p 0.95 --top-k 20 --repeat-penalty 1.0 \
   "${sampling_arguments[@]}" "${speculative_arguments[@]}" "$@"

@@ -82,7 +82,7 @@ def run_case(options, name):
             command,
             options.port,
             options.output / f"{name}.log",
-            env={**os.environ, "BONSAI_MODELS_DIR": str(options.models)},
+            env={**os.environ, "BONSAI_BUDDY_MODELS_DIR": str(options.models)},
         ) as base_url:
             started = time.monotonic()
             for turn in range(8):

@@ -1,5 +1,5 @@
 {
-  description = "Foreground Bonsai 2 profiles for coding agents on the Radeon RX 6700";
+  description = "Bonsai Buddy profiles for coding agents on the Radeon RX 6700";
 
   inputs.nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
 
@@ -73,34 +73,34 @@
       runtime = mkRuntime "vulkan";
       rocmRuntime = mkRuntime "rocm";
       sourceRuntime = import ./runtime-source.nix { inherit pkgs rocmRuntime; };
-      vramHelper = pkgs.runCommand "bonsaid-vram" { nativeBuildInputs = [ pkgs.stdenv.cc ]; } ''
+      vramHelper = pkgs.runCommand "bonsai-buddy-vram" { nativeBuildInputs = [ pkgs.stdenv.cc ]; } ''
         mkdir -p $out/bin
-        c++ -O2 -std=c++17 ${./vram.cpp} -ldl -o $out/bin/bonsaid-vram
+        c++ -O2 -std=c++17 ${./vram.cpp} -ldl -o $out/bin/bonsai-buddy-vram
       '';
 
       profiles = import ./profiles.nix;
-      mkBonsaid =
+      mkBonsaiBuddy =
         name: profile:
         let
           substitutions = (builtins.removeAttrs profile [ "extraArgs" ]) // {
             llamaServer = "${if profile.backend == "vulkan" then runtime else sourceRuntime}/bin/llama-server";
-            vramHelper = "${vramHelper}/bin/bonsaid-vram";
+            vramHelper = "${vramHelper}/bin/bonsai-buddy-vram";
             hipLibrary = "${pkgs.rocmPackages.clr}/lib/libamdhip64.so.7";
             extraArgs = pkgs.lib.escapeShellArgs profile.extraArgs;
           };
         in
         pkgs.writeShellApplication {
-          name = "bonsaid-${name}";
+          name = "bonsai-buddy-${name}";
           runtimeInputs = [
             pkgs.curl
             pkgs.coreutils
           ];
           text = builtins.replaceStrings (map (key: "@${key}@") (
             builtins.attrNames substitutions
-          )) (builtins.attrValues substitutions) (builtins.readFile ./bonsaid.sh);
+          )) (builtins.attrValues substitutions) (builtins.readFile ./bonsai-buddy.sh);
         };
 
-      modelPackages = builtins.mapAttrs mkBonsaid profiles;
+      modelPackages = builtins.mapAttrs mkBonsaiBuddy profiles;
       mkApp = package: {
         type = "app";
         program = pkgs.lib.getExe package;
@@ -109,7 +109,7 @@
     {
       packages.${system} = modelPackages // {
         default = modelPackages."9b";
-        bonsaid = modelPackages."9b";
+        bonsai-buddy = modelPackages."9b";
         inherit runtime;
         runtime-rocm = rocmRuntime;
         runtime-source = sourceRuntime;
@@ -135,7 +135,7 @@
       };
       formatter.${system} = pkgs.nixfmt;
       checks.${system}.python =
-        pkgs.runCommand "bonsaid-python-checks"
+        pkgs.runCommand "bonsai-buddy-python-checks"
           {
             nativeBuildInputs = [
               pkgs.python3
@@ -160,9 +160,9 @@
           pkgs.ruff
           pkgs.ty
         ];
-        BONSAID_INCLUDE = "${sourceRuntime.dev}/include";
-        BONSAID_RELEASE_LIB = "${rocmRuntime}/lib/bonsai2";
-        BONSAID_SOURCE_LIB = "${sourceRuntime}/lib";
+        BONSAI_BUDDY_INCLUDE = "${sourceRuntime.dev}/include";
+        BONSAI_BUDDY_RELEASE_LIB = "${rocmRuntime}/lib/bonsai2";
+        BONSAI_BUDDY_SOURCE_LIB = "${sourceRuntime}/lib";
       };
     };
 }

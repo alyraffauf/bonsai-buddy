@@ -4,8 +4,8 @@ Run these commands from the repository root with other GPU models stopped.
 Build the required profiles and populate the model cache first: start each profile
 with `nix run .#PROFILE`, wait until it is ready, then stop it with Ctrl+C.
 
-The tools use `BONSAI_MODELS_DIR`, then `$XDG_CACHE_HOME/bonsaid/models`, then
-`$HOME/.cache/bonsaid/models`. `--models DIRECTORY` overrides that path for a benchmark.
+The tools use `BONSAI_BUDDY_MODELS_DIR`, then `$XDG_CACHE_HOME/bonsai-buddy/models`, then
+`$HOME/.cache/bonsai-buddy/models`. `--models DIRECTORY` overrides that path for a benchmark.
 New logs and responses go to `benchmarks/results/`, which Git ignores.
 Failed benchmarks exit with a nonzero status and include an `error` in their JSON record.
 
@@ -14,7 +14,7 @@ Failed benchmarks exit with a nonzero status and include an `error` in their JSO
 Cache the `#9b-plain` model before this test. Set the path and run `llama-bench`:
 
 ```sh
-models_dir=${BONSAI_MODELS_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bonsaid/models}
+models_dir=${BONSAI_BUDDY_MODELS_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bonsai-buddy/models}
 mkdir -p benchmarks/results
 nix run .#bench -- \
 	-m "$models_dir/Ternary-Bonsai-2-9B-PQ2_0.gguf" \
@@ -82,18 +82,18 @@ nix develop
 Generate the grammar, compile the benchmark, and compare both libraries:
 
 ```sh
-models_dir=${BONSAI_MODELS_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bonsaid/models}
+models_dir=${BONSAI_BUDDY_MODELS_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bonsai-buddy/models}
 mkdir -p benchmarks/results
 prism_source=$(nix eval --raw .#packages.x86_64-linux.runtime-source.src.outPath)
 python3 benchmarks/grammar_schema.py > benchmarks/results/grammar-schema.json
 python3 "$prism_source/examples/json_schema_to_grammar.py" \
 	benchmarks/results/grammar-schema.json > benchmarks/results/grammar.gbnf
-c++ -O2 -std=c++17 benchmarks/grammar.cpp -I"$BONSAID_INCLUDE" \
-	-L"$BONSAID_RELEASE_LIB" -Wl,-rpath,"$BONSAID_RELEASE_LIB" \
+c++ -O2 -std=c++17 benchmarks/grammar.cpp -I"$BONSAI_BUDDY_INCLUDE" \
+	-L"$BONSAI_BUDDY_RELEASE_LIB" -Wl,-rpath,"$BONSAI_BUDDY_RELEASE_LIB" \
 	-l:libllama.so.0 -o benchmarks/results/grammar-bench
 benchmarks/results/grammar-bench \
 	"$models_dir/Ternary-Bonsai-2-9B-PQ2_0.gguf" benchmarks/results/grammar.gbnf
-LD_LIBRARY_PATH="$BONSAID_SOURCE_LIB" benchmarks/results/grammar-bench \
+LD_LIBRARY_PATH="$BONSAI_BUDDY_SOURCE_LIB" benchmarks/results/grammar-bench \
 	"$models_dir/Ternary-Bonsai-2-9B-PQ2_0.gguf" benchmarks/results/grammar.gbnf
 ```
 

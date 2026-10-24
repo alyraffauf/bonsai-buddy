@@ -1,4 +1,4 @@
-# bonsaid
+# Bonsai Buddy
 
 Run Prism's Bonsai 2 9B and 27B models with Nix. Each profile starts a foreground
 server with a web UI and an OpenAI-compatible API.

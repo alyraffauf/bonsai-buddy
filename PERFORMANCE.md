@@ -1,4 +1,4 @@
-# Bonsai performance on the RX 6700
+# Bonsai Buddy performance on the RX 6700
 
 Measurements taken on 2026-10-23, with a Radeon RX 6700, 10 GB VRAM,
 Ryzen 5 5600X, 32 GB system RAM, and PCIe 4.0 x16.

@@ -16,11 +16,11 @@ from typing import Any
 
 
 def default_models_directory() -> Path:
-    configured = os.environ.get("BONSAI_MODELS_DIR")
+    configured = os.environ.get("BONSAI_BUDDY_MODELS_DIR")
     if configured:
         return Path(configured)
     cache = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")
-    return Path(cache) / "bonsaid" / "models"
+    return Path(cache) / "bonsai-buddy" / "models"
 
 
 def positive_integer(value: str) -> int:

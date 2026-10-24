@@ -7,7 +7,7 @@
 
 int main(int argc, char ** argv) {
     if (argc != 3) {
-        std::cerr << "Usage: bonsaid-vram HIP_LIBRARY SYSFS_VRAM_USED\n";
+        std::cerr << "Usage: bonsai-buddy-vram HIP_LIBRARY SYSFS_VRAM_USED\n";
         return 2;
     }
     void * library = dlopen(argv[1], RTLD_NOW | RTLD_LOCAL);

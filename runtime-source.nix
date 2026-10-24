@@ -28,7 +28,7 @@ cpuRuntime.overrideAttrs (previous: {
   patches = [ ];
   doCheck = false;
   npmDeps = pkgs.fetchNpmDeps {
-    name = "bonsaid-ui-deps";
+    name = "bonsai-buddy-ui-deps";
     src = source;
     preBuild = "pushd tools/ui";
     hash = "sha256-2Q7XhaLAArmviOLdQsNbYTfdyDE5pW9lR26cRHEVl9k=";
