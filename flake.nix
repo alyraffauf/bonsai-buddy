@@ -1,5 +1,5 @@
 {
-  description = "Run Bonsai 2 27B in the foreground with Prism's Vulkan runtime";
+  description = "Run Bonsai 2 9B in the foreground with Prism's Vulkan runtime";
 
   inputs.nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
 
