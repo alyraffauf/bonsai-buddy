@@ -7,16 +7,17 @@ The defaults target coding agents on the Radeon RX 6700 with 10 GB of VRAM.
 ## Run
 
 Use x86_64 Linux with Nix, flakes, and access to the AMD GPU. The source runtime
-requires AVX2, FMA, and F16C. From this checkout, choose one command:
+requires AVX2, FMA, and F16C. Choose one command:
 
 | Model | Context | Server | OpenCode |
 | --- | ---: | --- | --- |
-| 9B | 128K | `nix run .#9b` | `nix run .#opencode-9b` |
-| 27B | 16K | `nix run .#27b` | `nix run .#opencode-27b` |
+| 9B | 128K | `nix run github:alyraffauf/bonsai-buddy#9b` | `nix run github:alyraffauf/bonsai-buddy#opencode-9b` |
+| 27B | 16K | `nix run github:alyraffauf/bonsai-buddy#27b` | `nix run github:alyraffauf/bonsai-buddy#opencode-27b` |
 
 Open the [web UI](http://localhost:8080). Ctrl+C stops the server. The first run
 builds the runtime and downloads verified weights; later runs reuse the cache.
-Run one GPU model at a time. `nix run` selects 9B.
+Run one GPU model at a time. From a checkout, use `nix run .#9b` or the other
+profile names above. `nix run` selects 9B.
 
 Downloads for the default profiles are about 3.3 GB for 9B and 7.8 GB for 27B,
 including the vision projector. The runtime build needs additional disk space.
