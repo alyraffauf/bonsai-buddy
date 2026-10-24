@@ -1,5 +1,5 @@
 {
-  description = "Run Bonsai 2 9B in the foreground with Prism's Vulkan runtime";
+  description = "Run Bonsai 2 9B or 27B in the foreground with Prism's Vulkan runtime";
 
   inputs.nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
 
@@ -29,21 +29,33 @@
       '';
     };
 
-    bonsaid = pkgs.writeShellApplication {
-      name = "bonsaid";
+    mkBonsaid = modelSize: pkgs.writeShellApplication {
+      name = "bonsaid-${modelSize}";
       runtimeInputs = [ pkgs.curl pkgs.coreutils ];
       text = builtins.readFile (pkgs.replaceVars ./bonsaid.sh {
         llamaServer = "${runtime}/bin/llama-server";
+        inherit modelSize;
       });
+    };
+
+    bonsaid9b = mkBonsaid "9b";
+    bonsaid27b = mkBonsaid "27b";
+    mkApp = package: {
+      type = "app";
+      program = pkgs.lib.getExe package;
     };
   in {
     packages.${system} = {
-      default = bonsaid;
-      inherit bonsaid runtime;
+      default = bonsaid9b;
+      bonsaid = bonsaid9b;
+      "9b" = bonsaid9b;
+      "27b" = bonsaid27b;
+      inherit runtime;
     };
-    apps.${system}.default = {
-      type = "app";
-      program = "${bonsaid}/bin/bonsaid";
+    apps.${system} = {
+      default = mkApp bonsaid9b;
+      "9b" = mkApp bonsaid9b;
+      "27b" = mkApp bonsaid27b;
     };
   };
 }
