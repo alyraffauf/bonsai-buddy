@@ -9,6 +9,7 @@ let
     batchSize = "2048";
     ubatchSize = "512";
     maxTokens = "8192";
+    thinkingTokens = "1024";
     gpuReserveMb = "512";
     extraArgs = [ ];
     draftFile = "";
@@ -37,7 +38,8 @@ let
     kvType = "q8_0";
     batchSize = "1024";
     ubatchSize = "256";
-    maxTokens = "8192";
+    maxTokens = "4096";
+    thinkingTokens = "2048";
     gpuReserveMb = "256";
     extraArgs = [ ];
     draftFile = "";
@@ -73,5 +75,6 @@ in
     contextTokens = "8192";
     kvType = "f16";
     maxTokens = "4096";
+    thinkingTokens = "1024";
   };
 }

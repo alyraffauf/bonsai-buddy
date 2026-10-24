@@ -89,7 +89,7 @@ exec @llamaServer@ \
   --alias "bonsai2:$model_size" \
   --ctx-size "${BONSAI_BUDDY_CTX:-@contextTokens@}" --parallel 1 \
   --cache-type-k "${BONSAI_BUDDY_KV_TYPE:-@kvType@}" --cache-type-v "${BONSAI_BUDDY_KV_TYPE:-@kvType@}" \
-  --reasoning-format deepseek --reasoning-budget "${BONSAI_BUDDY_THINK_TOKENS:-1024}" \
+  --reasoning-format deepseek --reasoning-budget "${BONSAI_BUDDY_THINK_TOKENS:-@thinkingTokens@}" \
   --reasoning-budget-message $'\nI have enough information. I will now give the final answer or next tool call.\n' \
   --n-predict "${BONSAI_BUDDY_MAX_TOKENS:-@maxTokens@}" \
   --fit on --fit-target "$fit_target" --flash-attn on \

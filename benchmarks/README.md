@@ -1,13 +1,19 @@
 # Run the benchmarks
 
-Run these commands from the repository root with other GPU models stopped.
-Build the required profiles and populate the model cache first: start each profile
-with `nix run .#PROFILE`, wait until it is ready, then stop it with Ctrl+C.
+Stop other GPU models. Run all commands from the repository root.
 
-The tools use `BONSAI_BUDDY_MODELS_DIR`, then `$XDG_CACHE_HOME/bonsai-buddy/models`, then
-`$HOME/.cache/bonsai-buddy/models`. `--models DIRECTORY` overrides that path for a benchmark.
-New logs and responses go to `benchmarks/results/`, which Git ignores.
-Failed benchmarks exit with a nonzero status and include an `error` in their JSON record.
+Build each required profile and populate the model cache before benchmarking:
+
+1. Start the profile with `nix run .#PROFILE`.
+2. Wait until the server is ready.
+3. Press Ctrl+C to stop the server.
+
+The Python runners use `BONSAI_BUDDY_MODELS_DIR`, then `$XDG_CACHE_HOME/bonsai-buddy/models`,
+then `$HOME/.cache/bonsai-buddy/models`. Pass `--models DIRECTORY` to
+`benchmarks/agent.py` or `benchmarks/server.py` to override that path. By default,
+the Python runners write logs and responses to `benchmarks/results/`. Git ignores that
+directory. When a benchmark case fails, its Python runner adds an `error` field to the
+JSON record and returns a nonzero status.
 
 ## Measure plain inference
 
@@ -28,14 +34,16 @@ Use the HTTP tests below for generation through the API and speculative decoding
 
 ## Run a coding-agent loop
 
-Cache the `#9b` and `#27b` models. To test the shipped thinking defaults and preserve
-reasoning in subsequent requests, run:
+Cache the `#9b` and `#27b` models. To enable thinking with each profile's default
+reasoning budget and preserve reasoning in subsequent requests, run:
 
 ```sh
 nix develop -c python3 benchmarks/agent.py --flake . \
 	--thinking --preserve-reasoning --case 9b --case 27b \
 	--output benchmarks/results/agent-thinking
 ```
+
+The thinking-enabled runner limits each request to 4096 total output tokens.
 
 To measure greedy generation with thinking disabled, run:
 
@@ -44,16 +52,26 @@ nix develop -c python3 benchmarks/agent.py --flake . --case 9b --case 27b
 ```
 
 The test uses an in-memory Python file and simulated tools. It parses the resulting
-code without executing it or modifying your source files. A pass requires reading
-the file, fixing `add`, preserving the helper functions, and testing after the last edit.
+code but does not execute the code or change your source files. To pass, the agent must
+read the file, fix `add`, preserve the helper functions, and run tests after its last edit.
 The task allows eight turns. A successful run prints `PASSED`.
 
 Omit `--preserve-reasoning` to compare a client that discards previous reasoning.
 The default port is 18083. Use `--port` to select another free port.
 
+To repeat the Vulkan baseline, cache `#9b-plain` and `#27b-vulkan`, then run:
+
+```sh
+runtime=$(nix build .#runtime --no-link --print-out-paths)
+nix develop -c python3 benchmarks/agent.py \
+	--server "$runtime/bin/llama-server" --case 9b-plain --case 27b-ptq \
+	--context 8192 --batch-size 256 --ubatch-size 128 \
+	--output benchmarks/results/agent-vulkan
+```
+
 ## Compare speculative decoding
 
-Cache the `#9b-plain`, `#9b`, and `#9b-rewrite` models, then run:
+Cache the `#9b-plain`, `#9b`, and `#9b-rewrite` models. Run the comparison:
 
 ```sh
 runtime=$(nix build .#runtime-source --no-link --print-out-paths)
@@ -68,12 +86,14 @@ and KV precision. The raw-runtime cases use names such as `9b-mtp1` and `27b-ptq
 the agent test's `--flake` mode uses app names such as `9b` and `27b`.
 
 To measure long-prefix reuse, add `--checkpoints 32 --cache-ram 1024 --cache-prompt`
-and `--code-functions 128`. Compare `cache_n`, `prompt_n`, and `prompt_ms` between the
-first and second requests. Cold and cached prefill are separate measurements.
+and `--code-functions 128` to the `benchmarks/server.py` command. For each workload,
+compare `cache_n`, `prompt_n`, and `prompt_ms` between repetition 0 and repetition 1.
+The initial arithmetic check is a separate request. Cold and cached prefill are separate
+measurements.
 
 ## Compare grammar cloning
 
-Cache the `#9b-plain` model, then enter the dev shell:
+Cache the `#9b-plain` model. Enter the dev shell:
 
 ```sh
 nix develop

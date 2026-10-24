@@ -79,6 +79,11 @@
       '';
 
       profiles = import ./profiles.nix;
+      renderScript =
+        script: substitutions:
+        builtins.replaceStrings (map (key: "@${key}@") (
+          builtins.attrNames substitutions
+        )) (builtins.attrValues substitutions) (builtins.readFile script);
       mkBonsaiBuddy =
         name: profile:
         let
@@ -95,26 +100,83 @@
             pkgs.curl
             pkgs.coreutils
           ];
-          text = builtins.replaceStrings (map (key: "@${key}@") (
-            builtins.attrNames substitutions
-          )) (builtins.attrValues substitutions) (builtins.readFile ./bonsai-buddy.sh);
+          text = renderScript ./bonsai-buddy.sh substitutions;
         };
 
       modelPackages = builtins.mapAttrs mkBonsaiBuddy profiles;
+      mkClient =
+        size:
+        let
+          profile = profiles.${size};
+          clientPackage = pkgs.opencode;
+          opencodeConfig = pkgs.writeText "bonsai-buddy-opencode-${size}.json" (
+            builtins.toJSON {
+              "$schema" = "https://opencode.ai/config.json";
+              model = "bonsai-buddy/bonsai2:${size}";
+              small_model = "bonsai-buddy/bonsai2:${size}";
+              compaction = {
+                auto = true;
+                prune = true;
+              };
+              provider.bonsai-buddy = {
+                npm = "@ai-sdk/openai-compatible";
+                name = "Bonsai Buddy";
+                options.baseURL = "http://127.0.0.1:8080/v1";
+                models."bonsai2:${size}" = {
+                  name = "Bonsai 2 ${size}";
+                  reasoning = true;
+                  interleaved.field = "reasoning_content";
+                  options.reasoningEffort = "medium";
+                };
+              };
+            }
+          );
+        in
+        pkgs.writeShellApplication {
+          name = "bonsai-buddy-opencode-${size}";
+          runtimeInputs = [
+            pkgs.coreutils
+            pkgs.curl
+            pkgs.jq
+            clientPackage
+          ];
+          text = renderScript ./client.sh {
+            clientProgram = pkgs.lib.getExe clientPackage;
+            serverProgram = pkgs.lib.getExe modelPackages.${size};
+            modelSize = size;
+            inherit (profile) contextTokens maxTokens thinkingTokens;
+            reserveTokens = if size == "27b" then "4096" else "8192";
+            opencodeConfig = "${opencodeConfig}";
+          };
+        };
+      clientPackages = builtins.listToAttrs (
+        map
+          (size: {
+            name = "opencode-${size}";
+            value = mkClient size;
+          })
+          [
+            "9b"
+            "27b"
+          ]
+      );
       mkApp = package: {
         type = "app";
         program = pkgs.lib.getExe package;
       };
     in
     {
-      packages.${system} = modelPackages // {
-        default = modelPackages."9b";
-        bonsai-buddy = modelPackages."9b";
-        inherit runtime;
-        runtime-rocm = rocmRuntime;
-        runtime-source = sourceRuntime;
-      };
-      apps.${system} = builtins.mapAttrs (_: mkApp) modelPackages // {
+      packages.${system} =
+        modelPackages
+        // clientPackages
+        // {
+          default = modelPackages."9b";
+          bonsai-buddy = modelPackages."9b";
+          inherit runtime;
+          runtime-rocm = rocmRuntime;
+          runtime-source = sourceRuntime;
+        };
+      apps.${system} = builtins.mapAttrs (_: mkApp) (modelPackages // clientPackages) // {
         default = mkApp modelPackages."9b";
         bench = {
           type = "app";
@@ -141,12 +203,16 @@
               pkgs.python3
               pkgs.ruff
               pkgs.ty
+              pkgs.bash
+              pkgs.curl
+              pkgs.jq
             ];
           }
           ''
             cp -r ${./benchmarks} benchmarks
             cp -r ${./tests} tests
             cp ${./pyproject.toml} pyproject.toml
+            cp ${./client.sh} client.sh
             ruff format --check benchmarks tests
             ruff check benchmarks tests
             ty check --extra-search-path benchmarks benchmarks tests
@@ -159,6 +225,9 @@
           pkgs.stdenv.cc
           pkgs.ruff
           pkgs.ty
+          pkgs.bash
+          pkgs.curl
+          pkgs.jq
         ];
         BONSAI_BUDDY_INCLUDE = "${sourceRuntime.dev}/include";
         BONSAI_BUDDY_RELEASE_LIB = "${rocmRuntime}/lib/bonsai2";
