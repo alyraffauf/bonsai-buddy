@@ -1,0 +1,955 @@
+{
+  "date": "2026-10-24",
+  "gpu": "Radeon RX 6700, 10 GB",
+  "runtime_revision": "b87ca7225456b06b0975b8239c66b5aecf07e37c",
+  "method": "Startup probes allocate the requested context and answer 17*23. Long runs use benchmarks/context.py, three literal route codes across a synthetic Python module, greedy sampling, thinking disabled, a required schema-constrained tool call, and cache_prompt=false. Each long run contains one cold request. GPU placement varies with desktop VRAM. Reported layer counts do not account for output-tensor overrides.",
+  "allocation_probes": [
+    {
+      "case": "27b-32k-q4-u128",
+      "context": 32768,
+      "key_type": "q4_0",
+      "value_type": "q4_0",
+      "microbatch": 128,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6539.67
+        ],
+        "gpu_kv_mib": [
+          576.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          158.77
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2387
+      },
+      "actual_context": 32768,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-32k-q5-q4-u64",
+      "context": 32768,
+      "key_type": "q5_0",
+      "value_type": "q4_0",
+      "microbatch": 64,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6539.67
+        ],
+        "gpu_kv_mib": [
+          640.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          143.52
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2302
+      },
+      "actual_context": 32768,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-32k-q8-cpu-output-u64",
+      "context": 32768,
+      "key_type": "q8_0",
+      "value_type": "q8_0",
+      "microbatch": 64,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6090.1
+        ],
+        "gpu_kv_mib": [
+          1088.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          144.77
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2302
+      },
+      "actual_context": 32768,
+      "answer": "391",
+      "cpu_output": true,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-32k-q8-q4-cpu-output",
+      "context": 32768,
+      "key_type": "q8_0",
+      "value_type": "q4_0",
+      "microbatch": 128,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6090.1
+        ],
+        "gpu_kv_mib": [
+          832.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          161.27
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2302
+      },
+      "actual_context": 32768,
+      "answer": "391",
+      "cpu_output": true,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-32k-q8-q4-u128",
+      "context": 32768,
+      "key_type": "q8_0",
+      "value_type": "q4_0",
+      "microbatch": 128,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 62,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6245.41
+        ],
+        "gpu_kv_mib": [
+          832.0
+        ],
+        "gpu_rs_mib": [
+          140.27
+        ],
+        "gpu_compute_mib": [
+          175.35
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2387
+      },
+      "actual_context": 32768,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-32k-q8-u128-reserve128",
+      "context": 32768,
+      "key_type": "q8_0",
+      "value_type": "q8_0",
+      "microbatch": 128,
+      "reserve_mib": 128,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 61,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6151.07
+        ],
+        "gpu_kv_mib": [
+          1020.0
+        ],
+        "gpu_rs_mib": [
+          140.27
+        ],
+        "gpu_compute_mib": [
+          237.6
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2259
+      },
+      "actual_context": 32768,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-32k-q8-u128",
+      "context": 32768,
+      "key_type": "q8_0",
+      "value_type": "q8_0",
+      "microbatch": 128,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 60,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6052.98
+        ],
+        "gpu_kv_mib": [
+          1020.0
+        ],
+        "gpu_rs_mib": [
+          137.16
+        ],
+        "gpu_compute_mib": [
+          237.6
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2390
+      },
+      "actual_context": 32768,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-ptq-64k-q4-u128",
+      "context": 65536,
+      "key_type": "q4_0",
+      "value_type": "q4_0",
+      "microbatch": 128,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PTQ1_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          5395.33
+        ],
+        "gpu_kv_mib": [
+          1152.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          294.77
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2578
+      },
+      "actual_context": 65536,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-ptq-64k-q4-u256",
+      "context": 65536,
+      "key_type": "q4_0",
+      "value_type": "q4_0",
+      "microbatch": 256,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PTQ1_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          5395.33
+        ],
+        "gpu_kv_mib": [
+          1152.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          333.27
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2568
+      },
+      "actual_context": 65536,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "27b-ptq-64k-q4-u64",
+      "context": 65536,
+      "key_type": "q4_0",
+      "value_type": "q4_0",
+      "microbatch": 64,
+      "reserve_mib": 256,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PTQ1_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          5395.33
+        ],
+        "gpu_kv_mib": [
+          1152.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          275.52
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2543
+      },
+      "actual_context": 65536,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "9b-128k-f16-u256",
+      "context": 131072,
+      "key_type": "f16",
+      "value_type": "f16",
+      "microbatch": 256,
+      "reserve_mib": 512,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf",
+        "reported_gpu_layers": 34,
+        "reported_total_layers": 34,
+        "gpu_model_mib": [
+          2283.29
+        ],
+        "gpu_kv_mib": [
+          4096.0,
+          512.0
+        ],
+        "gpu_rs_mib": [
+          100.5
+        ],
+        "gpu_compute_mib": [
+          112.01,
+          86.01,
+          86.01
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2558
+      },
+      "actual_context": 131072,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "9b-128k-f16-u512",
+      "context": 131072,
+      "key_type": "f16",
+      "value_type": "f16",
+      "microbatch": 512,
+      "reserve_mib": 512,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf",
+        "reported_gpu_layers": 33,
+        "reported_total_layers": 34,
+        "gpu_model_mib": [
+          2226.88
+        ],
+        "gpu_kv_mib": [
+          4096.0,
+          512.0
+        ],
+        "gpu_rs_mib": [
+          96.31
+        ],
+        "gpu_compute_mib": [
+          228.77,
+          172.02,
+          172.02
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2558
+      },
+      "actual_context": 131072,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "9b-256k-q8-u256",
+      "context": 262144,
+      "key_type": "q8_0",
+      "value_type": "q8_0",
+      "microbatch": 256,
+      "reserve_mib": 512,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf",
+        "reported_gpu_layers": 18,
+        "reported_total_layers": 34,
+        "gpu_model_mib": [
+          1393.77
+        ],
+        "gpu_kv_mib": [
+          2176.0,
+          544.0
+        ],
+        "gpu_rs_mib": [
+          50.25
+        ],
+        "gpu_compute_mib": [
+          2008.77,
+          1180.27,
+          1180.27
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2526
+      },
+      "actual_context": 262144,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    },
+    {
+      "case": "9b-plain-256k-q8-u32",
+      "context": 262144,
+      "key_type": "q8_0",
+      "value_type": "q8_0",
+      "microbatch": 32,
+      "reserve_mib": 512,
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-9B-PQ2_0.gguf",
+        "reported_gpu_layers": 31,
+        "reported_total_layers": 33,
+        "gpu_model_mib": [
+          1923.89
+        ],
+        "gpu_kv_mib": [
+          4352.0
+        ],
+        "gpu_rs_mib": [
+          46.06
+        ],
+        "gpu_compute_mib": [
+          1056.27
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2558
+      },
+      "actual_context": 262144,
+      "answer": "391",
+      "cpu_output": false,
+      "smoke_passed": true
+    }
+  ],
+  "long_context_runs": [
+    {
+      "case": "27b-32k-centered",
+      "profile": "27b",
+      "context_capacity": 32768,
+      "key_type": "q4_0",
+      "value_type": "q4_0",
+      "microbatch": 128,
+      "reserve_mib": 256,
+      "cpu_output": false,
+      "mean_centered": true,
+      "prompt_tokens_before_template": 26906,
+      "passed": true,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "report_routes",
+              "arguments": "{\"north\":\"plum-472901\",\"central\":\"teal-683275\",\"south\":\"moss-129048\"}"
+            },
+            "id": "lg255SeR5km0kHHztM5vwIW5MIWa50Rw"
+          }
+        ]
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 27209,
+        "prompt_ms": 132292.317,
+        "prompt_per_token_ms": 4.862079348744901,
+        "prompt_per_second": 205.67331963805574,
+        "predicted_n": 75,
+        "predicted_ms": 4836.532,
+        "predicted_per_token_ms": 65.35854054054055,
+        "predicted_per_second": 15.300219248006629
+      },
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6539.67
+        ],
+        "gpu_kv_mib": [
+          576.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          158.77
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2302
+      }
+    },
+    {
+      "case": "27b-32k-cpu-output-long",
+      "profile": "27b",
+      "context_capacity": 32768,
+      "key_type": "q5_0",
+      "value_type": "q4_0",
+      "microbatch": 64,
+      "reserve_mib": 256,
+      "cpu_output": true,
+      "mean_centered": false,
+      "prompt_tokens_before_template": 26906,
+      "passed": true,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "report_routes",
+              "arguments": "{\"north\":\"plum-472901\",\"central\":\"teal-683275\",\"south\":\"moss-129048\"}"
+            },
+            "id": "4JzkBQAMrtate3HRSOlokzuDl8clRCqT"
+          }
+        ]
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 27209,
+        "prompt_ms": 143775.957,
+        "prompt_per_token_ms": 5.284132345914954,
+        "prompt_per_second": 189.24582779859364,
+        "predicted_n": 75,
+        "predicted_ms": 6281.443,
+        "predicted_per_token_ms": 84.88436486486486,
+        "predicted_per_second": 11.78073254823772
+      },
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6217.6
+        ],
+        "gpu_kv_mib": [
+          640.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          143.52
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2575
+      }
+    },
+    {
+      "case": "27b-32k-q4-long",
+      "profile": "27b",
+      "context_capacity": 32768,
+      "key_type": "q4_0",
+      "value_type": "q4_0",
+      "microbatch": 128,
+      "reserve_mib": 256,
+      "cpu_output": false,
+      "mean_centered": false,
+      "prompt_tokens_before_template": 26906,
+      "passed": true,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "report_routes",
+              "arguments": "{\"north\":\"plum-472901\",\"central\":\"teal-683275\",\"south\":\"moss-129048\"}"
+            },
+            "id": "ubWOXnn5Trl7r9z2OfuHPVYf9a6eQegU"
+          }
+        ]
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 27209,
+        "prompt_ms": 139999.566,
+        "prompt_per_token_ms": 5.1453403653202985,
+        "prompt_per_second": 194.35060248686773,
+        "predicted_n": 75,
+        "predicted_ms": 5736.423,
+        "predicted_per_token_ms": 77.51922972972973,
+        "predicted_per_second": 12.900024980724051
+      },
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 64,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6441.58
+        ],
+        "gpu_kv_mib": [
+          576.0
+        ],
+        "gpu_rs_mib": [
+          146.51
+        ],
+        "gpu_compute_mib": [
+          172.85
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2555
+      }
+    },
+    {
+      "case": "27b-32k-q5-q4-long",
+      "profile": "27b",
+      "context_capacity": 32768,
+      "key_type": "q5_0",
+      "value_type": "q4_0",
+      "microbatch": 64,
+      "reserve_mib": 256,
+      "cpu_output": false,
+      "mean_centered": false,
+      "prompt_tokens_before_template": 26906,
+      "passed": true,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "report_routes",
+              "arguments": "{\"north\":\"plum-472901\",\"central\":\"teal-683275\",\"south\":\"moss-129048\"}"
+            },
+            "id": "nGgirUVBgbz5R1WkBujMn1zg7eoOpz99"
+          }
+        ]
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 27209,
+        "prompt_ms": 166013.942,
+        "prompt_per_token_ms": 6.101434892866331,
+        "prompt_per_second": 163.89587327551078,
+        "predicted_n": 75,
+        "predicted_ms": 7104.131,
+        "predicted_per_token_ms": 96.00177027027027,
+        "predicted_per_second": 10.41647458359087
+      },
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 61,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6151.07
+        ],
+        "gpu_kv_mib": [
+          600.0
+        ],
+        "gpu_rs_mib": [
+          140.27
+        ],
+        "gpu_compute_mib": [
+          200.1
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2718
+      }
+    },
+    {
+      "case": "27b-64k-ptq-long",
+      "profile": "27b",
+      "context_capacity": 65536,
+      "key_type": "q4_0",
+      "value_type": "q4_0",
+      "microbatch": 256,
+      "reserve_mib": 256,
+      "cpu_output": false,
+      "mean_centered": false,
+      "prompt_tokens_before_template": 54620,
+      "passed": true,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "report_routes",
+              "arguments": "{\"north\":\"plum-472901\",\"central\":\"teal-683275\",\"south\":\"moss-129048\"}"
+            },
+            "id": "rdOzMk144N1Q1TeOHI3uRYiLZ3YMZZl4"
+          }
+        ]
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 54923,
+        "prompt_ms": 437676.918,
+        "prompt_per_token_ms": 7.9689186315387,
+        "prompt_per_second": 125.48754056068363,
+        "predicted_n": 75,
+        "predicted_ms": 8163.623,
+        "predicted_per_token_ms": 110.31922972972973,
+        "predicted_per_second": 9.064602811766296
+      },
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PTQ1_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          5395.33
+        ],
+        "gpu_kv_mib": [
+          1152.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          333.27
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2537
+      },
+      "measurement_launcher": "27b-long"
+    },
+    {
+      "case": "9b-128k-long",
+      "profile": "9b",
+      "context_capacity": 131072,
+      "key_type": "f16",
+      "value_type": "f16",
+      "microbatch": 256,
+      "reserve_mib": 512,
+      "cpu_output": false,
+      "mean_centered": false,
+      "prompt_tokens_before_template": 69632,
+      "passed": true,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "report_routes",
+              "arguments": "{\"north\":\"plum-472901\",\"central\":\"teal-683275\",\"south\":\"moss-129048\"}"
+            },
+            "id": "8A9pOiCFHfaEWijlX2tNWe3sGq7GPk4e"
+          }
+        ]
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 69935,
+        "prompt_ms": 135851.599,
+        "prompt_per_token_ms": 1.942540916565382,
+        "prompt_per_second": 514.7896713383551,
+        "predicted_n": 75,
+        "predicted_ms": 1590.723,
+        "predicted_per_token_ms": 21.496256756756758,
+        "predicted_per_second": 46.51972719323226,
+        "draft_n": 37,
+        "draft_n_accepted": 37
+      },
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf",
+        "reported_gpu_layers": 31,
+        "reported_total_layers": 34,
+        "gpu_model_mib": [
+          2114.06
+        ],
+        "gpu_kv_mib": [
+          4096.0,
+          512.0
+        ],
+        "gpu_rs_mib": [
+          87.94
+        ],
+        "gpu_compute_mib": [
+          116.76,
+          86.01,
+          86.01
+        ],
+        "target_gdn_autoregressive": false,
+        "target_gdn_chunked": false,
+        "fit_free_target_mib": 2872
+      }
+    },
+    {
+      "case": "9b-128k-reserve256-long",
+      "profile": "9b",
+      "context_capacity": 131072,
+      "key_type": "f16",
+      "value_type": "f16",
+      "microbatch": 256,
+      "reserve_mib": 256,
+      "cpu_output": false,
+      "mean_centered": false,
+      "prompt_tokens_before_template": 69632,
+      "passed": true,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "report_routes",
+              "arguments": "{\"north\":\"plum-472901\",\"central\":\"teal-683275\",\"south\":\"moss-129048\"}"
+            },
+            "id": "gXOXQ14d6J15s0JGfD59NwknK0yOpMcg"
+          }
+        ]
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 69935,
+        "prompt_ms": 130262.834,
+        "prompt_per_token_ms": 1.8626272109816258,
+        "prompt_per_second": 536.8760823981459,
+        "predicted_n": 75,
+        "predicted_ms": 2230.946,
+        "predicted_per_token_ms": 30.14791891891892,
+        "predicted_per_second": 33.16978537355902,
+        "draft_n": 37,
+        "draft_n_accepted": 37
+      },
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf",
+        "reported_gpu_layers": 34,
+        "reported_total_layers": 34,
+        "gpu_model_mib": [
+          2283.29
+        ],
+        "gpu_kv_mib": [
+          4096.0,
+          512.0
+        ],
+        "gpu_rs_mib": [
+          100.5
+        ],
+        "gpu_compute_mib": [
+          112.01,
+          86.01,
+          86.01
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true,
+        "fit_free_target_mib": 2705
+      }
+    },
+    {
+      "case": "27b-16k-performance-default",
+      "profile": "27b",
+      "context_capacity": 16384,
+      "key_type": "q8_0",
+      "value_type": "q8_0",
+      "microbatch": 256,
+      "reserve_mib": 256,
+      "cpu_output": false,
+      "mean_centered": false,
+      "prompt_tokens_before_template": 13918,
+      "passed": true,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "report_routes",
+              "arguments": "{\"north\":\"plum-472901\",\"central\":\"teal-683275\",\"south\":\"moss-129048\"}"
+            },
+            "id": "EFJwSpJXU6hzf83bCXMz0TfjQp6vH0ui"
+          }
+        ]
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 14221,
+        "prompt_ms": 69869.902,
+        "prompt_per_token_ms": 4.913149708178047,
+        "prompt_per_second": 203.53542216217792,
+        "predicted_n": 75,
+        "predicted_ms": 7027.639,
+        "predicted_per_token_ms": 94.96809459459459,
+        "predicted_per_second": 10.529852202140718
+      },
+      "allocation": {
+        "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "reported_gpu_layers": 65,
+        "reported_total_layers": 65,
+        "gpu_model_mib": [
+          6539.67
+        ],
+        "gpu_kv_mib": [
+          544.0
+        ],
+        "gpu_rs_mib": [
+          149.62
+        ],
+        "gpu_compute_mib": [
+          117.27
+        ],
+        "target_gdn_autoregressive": true,
+        "target_gdn_chunked": true
+      }
+    }
+  ],
+  "calibration": {
+    "model_file": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+    "key_type": "q4_0",
+    "value_type": "q4_0",
+    "rotation": true,
+    "chunks": 16,
+    "tokens_per_chunk": 512,
+    "captured_layers": 16,
+    "bias_file": "Ternary-Bonsai-2-27B-PQ2_0-q4_0-krot.gguf",
+    "bias_sha256": "5979c5feaae18e8f373b1fe9887f57feeaede493e81ee934b59a05a87a451e6c",
+    "bias_bytes": 66400,
+    "corpus_sha256": "6e66ab3f303b03ab83cb83872f23727aeb112baa3cf3489e16e98219534425e8",
+    "corpus_bytes": 64560
+  }
+}

@@ -88,12 +88,14 @@ exec @llamaServer@ \
   --host 127.0.0.1 --port "${BONSAI_BUDDY_PORT:-8080}" --cors-origins localhost \
   --alias "bonsai2:$model_size" \
   --ctx-size "${BONSAI_BUDDY_CTX:-@contextTokens@}" --parallel 1 \
-  --cache-type-k "${BONSAI_BUDDY_KV_TYPE:-@kvType@}" --cache-type-v "${BONSAI_BUDDY_KV_TYPE:-@kvType@}" \
+  --cache-type-k "${BONSAI_BUDDY_KV_TYPE_K:-${BONSAI_BUDDY_KV_TYPE:-@kvType@}}" \
+  --cache-type-v "${BONSAI_BUDDY_KV_TYPE_V:-${BONSAI_BUDDY_KV_TYPE:-@kvType@}}" \
   --reasoning-format deepseek --reasoning-budget "${BONSAI_BUDDY_THINK_TOKENS:-@thinkingTokens@}" \
   --reasoning-budget-message $'\nI have enough information. I will now give the final answer or next tool call.\n' \
   --n-predict "${BONSAI_BUDDY_MAX_TOKENS:-@maxTokens@}" \
   --fit on --fit-target "$fit_target" --flash-attn on \
-  --batch-size @batchSize@ --ubatch-size @ubatchSize@ --cache-ram "${BONSAI_BUDDY_CACHE_MB:-1024}" \
+  --batch-size @batchSize@ --ubatch-size "${BONSAI_BUDDY_UBATCH_SIZE:-@ubatchSize@}" \
+  --cache-ram "${BONSAI_BUDDY_CACHE_MB:-1024}" \
   --ctx-checkpoints 32 --cache-prompt \
   --temp 1.0 --top-p 0.95 --top-k 20 --repeat-penalty 1.0 \
   "${sampling_arguments[@]}" "${speculative_arguments[@]}" "$@"

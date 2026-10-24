@@ -1,4 +1,5 @@
 /result
 /result-*
 /benchmarks/results/
+/.rocprofv3/
 __pycache__/

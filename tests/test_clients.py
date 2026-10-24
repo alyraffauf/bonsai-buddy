@@ -141,6 +141,41 @@ class ClientLauncherTests(unittest.TestCase):
         self.assertEqual(limits["input"] - config["compaction"]["reserved"], 49152)
         self.assert_owned_server_stopped()
 
+    def test_long_context_limits_follow_each_model_capacity(self):
+        for size, context, output, reserve in [
+            ("9b", 131072, 8192, 8192),
+            ("27b", 32768, 4096, 4096),
+            ("27b", 65536, 4096, 4096),
+        ]:
+            with self.subTest(size=size):
+                self.environment.update(
+                    BONSAI_BUDDY_CTX=str(context),
+                    BONSAI_BUDDY_MAX_TOKENS=str(output),
+                    BONSAI_BUDDY_THINK_TOKENS="1024" if size == "9b" else "2048",
+                    SERVER_MODEL=f"bonsai2:{size}",
+                    SERVER_CONTEXT=str(context),
+                )
+                result = self.launch(size)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                config = json.loads(
+                    Path(self.environment["CLIENT_CAPTURE"]).read_text()
+                )["config"]
+                model = config["provider"]["bonsai-buddy"]["models"][f"bonsai2:{size}"]
+                self.assertEqual(
+                    model["limit"],
+                    {
+                        "context": context,
+                        "input": context - output,
+                        "output": output,
+                    },
+                )
+                self.assertEqual(config["compaction"]["reserved"], reserve)
+                self.assertEqual(
+                    model["options"]["reasoning_budget_tokens"],
+                    1024 if size == "9b" else 2048,
+                )
+                self.assert_owned_server_stopped()
+
     def test_reused_server_survives_client_exit(self):
         process = self.existing_server()
         result = self.launch()

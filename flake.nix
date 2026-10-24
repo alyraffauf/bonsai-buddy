@@ -73,6 +73,21 @@
       runtime = mkRuntime "vulkan";
       rocmRuntime = mkRuntime "rocm";
       sourceRuntime = import ./runtime-source.nix { inherit pkgs rocmRuntime; };
+      kernelMarkers =
+        pkgs.runCommand "bonsai-buddy-kernel-markers"
+          {
+            nativeBuildInputs = [ pkgs.stdenv.cc ];
+            buildInputs = [
+              sourceRuntime.dev
+              pkgs.rocmPackages.rocprofiler-sdk
+            ];
+          }
+          ''
+            mkdir -p $out/lib
+            c++ -shared -fPIC -O2 -Wall -Wextra -Werror \
+              ${./benchmarks/kernel-markers.cpp} \
+              -lrocprofiler-sdk-roctx -ldl -o $out/lib/libbonsai-kernel-markers.so
+          '';
       vramHelper = pkgs.runCommand "bonsai-buddy-vram" { nativeBuildInputs = [ pkgs.stdenv.cc ]; } ''
         mkdir -p $out/bin
         c++ -O2 -std=c++17 ${./vram.cpp} -ldl -o $out/bin/bonsai-buddy-vram
@@ -175,6 +190,7 @@
           inherit runtime;
           runtime-rocm = rocmRuntime;
           runtime-source = sourceRuntime;
+          kernel-markers = kernelMarkers;
         };
       apps.${system} = builtins.mapAttrs (_: mkApp) (modelPackages // clientPackages) // {
         default = mkApp modelPackages."9b";
@@ -219,19 +235,30 @@
             PYTHONPATH=benchmarks python3 -B -m unittest discover -s tests -v
             touch $out
           '';
-      devShells.${system}.default = pkgs.mkShell {
-        packages = [
-          pkgs.python3
-          pkgs.stdenv.cc
-          pkgs.ruff
-          pkgs.ty
-          pkgs.bash
-          pkgs.curl
-          pkgs.jq
-        ];
-        BONSAI_BUDDY_INCLUDE = "${sourceRuntime.dev}/include";
-        BONSAI_BUDDY_RELEASE_LIB = "${rocmRuntime}/lib/bonsai2";
-        BONSAI_BUDDY_SOURCE_LIB = "${sourceRuntime}/lib";
+      devShells.${system} = {
+        default = pkgs.mkShell {
+          packages = [
+            pkgs.python3
+            pkgs.stdenv.cc
+            pkgs.ruff
+            pkgs.ty
+            pkgs.bash
+            pkgs.curl
+            pkgs.jq
+          ];
+          BONSAI_BUDDY_INCLUDE = "${sourceRuntime.dev}/include";
+          BONSAI_BUDDY_RELEASE_LIB = "${rocmRuntime}/lib/bonsai2";
+          BONSAI_BUDDY_SOURCE_LIB = "${sourceRuntime}/lib";
+        };
+        profiling = pkgs.mkShell {
+          packages = [
+            pkgs.python3
+            pkgs.rocmPackages.rocprofiler-sdk
+          ];
+          BONSAI_BUDDY_BENCH = "${sourceRuntime}/bin/llama-bench";
+          BONSAI_BUDDY_SERVER = "${sourceRuntime}/bin/llama-server";
+          BONSAI_BUDDY_KERNEL_MARKERS = "${kernelMarkers}/lib/libbonsai-kernel-markers.so";
+        };
       };
     };
 }

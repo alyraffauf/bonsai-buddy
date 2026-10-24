@@ -12,7 +12,29 @@ from pathlib import Path
 from unittest.mock import patch
 
 from common import default_models_directory, running_server
+from context import EXPECTED, correct_tool_call
 from task import CodingTask
+
+
+class LongContextTests(unittest.TestCase):
+    def test_tool_retrieval_requires_every_exact_value(self):
+        def message(arguments):
+            return {
+                "tool_calls": [
+                    {
+                        "function": {
+                            "name": "report_routes",
+                            "arguments": json.dumps(arguments),
+                        }
+                    }
+                ]
+            }
+
+        self.assertTrue(correct_tool_call(message(EXPECTED)))
+        self.assertFalse(correct_tool_call(message({**EXPECTED, "north": "invented"})))
+        self.assertFalse(correct_tool_call(message({"north": EXPECTED["north"]})))
+        self.assertFalse(correct_tool_call(message({**EXPECTED, "extra": "value"})))
+        self.assertFalse(correct_tool_call({"content": json.dumps(EXPECTED)}))
 
 
 class CacheTests(unittest.TestCase):

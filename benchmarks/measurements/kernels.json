@@ -1,0 +1,2749 @@
+{
+  "date": "2026-10-24",
+  "gpu": "AMD Radeon RX 6700, gfx1031 with HSA override 10.3.0",
+  "profiler": "rocprofv3, ROCm 7.2.3",
+  "runtime_revision": "b87ca7225456b06b0975b8239c66b5aecf07e37c",
+  "gpu_plugin_revision": "73bfe6cc4",
+  "method": "Kernel summaries join HIP enqueue correlation IDs to marked llama_decode ranges. Prefill retains the final timed call(s); plain decode retains the last 62 calls at 2K or 30 calls at long depth. MTP summaries retain 64 target or draft calls. Traced timing includes profiler overhead. Controls omit the profiler and marker preload. Counter samples are individual dispatches, not workload averages. See docs/profiling.md.",
+  "captures": {
+    "9b-prefill-steady": {
+      "tokens_per_call": 2048,
+      "context_index": null,
+      "decode_calls": 1,
+      "kernel_dispatches": 4167,
+      "traced_gpu_span_ns": 2141188229,
+      "traced_gpu_active_ns": 2105802762,
+      "kernel_sum_ns": 2105802762,
+      "kernels": [
+        {
+          "name": "void mul_mat_q<(ggml_type)142, 64, false>(char const*, int const*, int const*, int const*, float*, float*, float const*, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 788,
+          "total_ns": 1641872504,
+          "percent_kernel_time": 77.9689595639347,
+          "vgpr_count": 248
+        },
+        {
+          "name": "void gated_delta_net_cuda<128, false, false, true, false>(float const*, float const*, float const*, float const*, float const*, float const*, float const*, float const*, float*, float*, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float, long, int, int const*, long)",
+          "calls": 96,
+          "total_ns": 167688675,
+          "percent_kernel_time": 7.963171006611112,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void concat_non_cont<unsigned int, 0>(char const*, char const*, char*, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 96,
+          "total_ns": 55447347,
+          "percent_kernel_time": 2.6330740941444355,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void flash_attn_tile<256, 256, 8, 4, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+          "calls": 32,
+          "total_ns": 47202484,
+          "percent_kernel_time": 2.241543455625879,
+          "vgpr_count": 216
+        },
+        {
+          "name": "Cijk_Alik_Bljk_SB_MT16x16x32_SN_1LDSB0_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASM_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DTVB0_DVO0_ETSP_EPS1_ELFLR0_EMLL0_FSSC10_FL0_GLVWA1_GLVWB1_GRCGA1_GRCGB1_GRPM1_GRVW1_GSU1_GSUASB_GLS0_ISA1030_IU1_K1_KLA_LBSPPA0_LBSPPB0_LPA0_LPB0_LDL1_LRVW1_LWPMn1_LDW0_FMA_MIAV0_MDA2_MO40_MMFGLC_MKFGSU256_NTA0_NTB0_NTC0_NTD0_NEPBS0_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR1_PLR1_PKA0_SIA1_SLW1_SS0_SU32_SUM3_SUS128_SCIUI1_SPO0_SRVW0_SSO0_SVW4_SNLL0_TSGRA0_TSGRB0_TT2_2_TLDS0_UMLDSA0_UMLDSB0_U64SL1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA0_WSGRB0_WS32_WG8_8_1_WGM1",
+          "calls": 192,
+          "total_ns": 32509339,
+          "percent_kernel_time": 1.5437979086476286,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void quantize_mmq_q8_1<(mmq_q8_1_ds_layout)0, false, false, false>(float const*, int const*, void*, long, long, long, long, long, int, int, int, float const*, float const*, float const*)",
+          "calls": 788,
+          "total_ns": 24837654,
+          "percent_kernel_time": 1.1794862485796285,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 220,
+          "total_ns": 23944480,
+          "percent_kernel_time": 1.1370713550237048,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<4096, 256, float, true>(float const*, float*, long, float, float const*, int)",
+          "calls": 507,
+          "total_ns": 23723686,
+          "percent_kernel_time": 1.126586327461565,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+          "calls": 224,
+          "total_ns": 23586275,
+          "percent_kernel_time": 1.1200609774867414,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 160,
+          "total_ns": 12963061,
+          "percent_kernel_time": 0.6155876150379938,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 249,
+          "total_ns": 11854774,
+          "percent_kernel_time": 0.5629574722725148,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 254,
+          "total_ns": 11666658,
+          "percent_kernel_time": 0.5540242519636319,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void ssm_conv_long_token_f32<true, 128ul, 4ul, 32l>(float const*, float const*, float const*, int, int, int, int, float*, int, int, int, long)",
+          "calls": 96,
+          "total_ns": 11304784,
+          "percent_kernel_time": 0.5368396415846282,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+          "calls": 64,
+          "total_ns": 6704857,
+          "percent_kernel_time": 0.3183990980063118,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void l2_norm_f32<32>(float const*, float*, int, long, long, long, float)",
+          "calls": 96,
+          "total_ns": 3204804,
+          "percent_kernel_time": 0.1521891820939686,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void flash_attn_combine_results<256>(float const*, HIP_vector_type<float, 2u> const*, float*, int)",
+          "calls": 32,
+          "total_ns": 2313650,
+          "percent_kernel_time": 0.10987021395121525,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 32,
+          "total_ns": 1555361,
+          "percent_kernel_time": 0.07386071611582395,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_set_rows<float, long, __half>(float const*, long const*, __half*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 64,
+          "total_ns": 1351005,
+          "percent_kernel_time": 0.06415629347531457,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 1,
+          "total_ns": 890642,
+          "percent_kernel_time": 0.042294654374662656,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 98,
+          "total_ns": 364681,
+          "percent_kernel_time": 0.017317908713047836,
+          "vgpr_count": 16
+        },
+        {
+          "name": "scale_f32(float const*, float*, float, float, long)",
+          "calls": 48,
+          "total_ns": 318041,
+          "percent_kernel_time": 0.015103076401036652,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 4,
+          "total_ns": 175840,
+          "percent_kernel_time": 0.008350259728645944,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void fwht_cuda_block<4096, 256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 4,
+          "total_ns": 118600,
+          "percent_kernel_time": 0.005632056436632216,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, true, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 1,
+          "total_ns": 94440,
+          "percent_kernel_time": 0.0044847505048528375,
+          "vgpr_count": 64
+        },
+        {
+          "name": "__amd_rocclr_copyBuffer",
+          "calls": 17,
+          "total_ns": 53560,
+          "percent_kernel_time": 0.0025434480838619016,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 1,
+          "total_ns": 49600,
+          "percent_kernel_time": 0.00235539628378548,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 3,
+          "total_ns": 5960,
+          "percent_kernel_time": 0.00028302745668067465,
+          "vgpr_count": 16
+        }
+      ],
+      "hip_api_ns": {
+        "hipStreamSynchronize": 1390860788,
+        "hipLaunchKernel": 230252952,
+        "hipExtModuleLaunchKernel": 10992702,
+        "hipGetDevice": 456608,
+        "hipGetLastError": 329766,
+        "hipMemcpyAsync": 262998,
+        "hipGetDevicePropertiesR0600": 75172,
+        "hipOccupancyMaxActiveBlocksPerMultiprocessor": 31162,
+        "hipDeviceGetAttribute": 12795
+      },
+      "benchmark": {
+        "build_commit": "b87ca7225",
+        "build_number": 10794,
+        "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+        "gpu_info": "AMD Radeon RX 6700",
+        "backends": "ROCm",
+        "model_filename": "Ternary-Bonsai-2-9B-PQ2_0.gguf",
+        "model_type": "qwen35 9B PQ2_0 - 2.13 bpw (group 128)",
+        "model_size": 2405812224,
+        "model_n_params": 8953803264,
+        "n_batch": 2048,
+        "n_ubatch": 512,
+        "n_threads": 6,
+        "cpu_mask": "0x0",
+        "cpu_strict": false,
+        "poll": 50,
+        "type_k": "f16",
+        "type_v": "f16",
+        "n_gpu_layers": 99,
+        "n_cpu_moe": 0,
+        "split_mode": "layer",
+        "main_gpu": 0,
+        "no_kv_offload": false,
+        "flash_attn": 1,
+        "devices": "auto",
+        "tensor_split": "0.00",
+        "tensor_buft_overrides": "none",
+        "load_mode": "auto",
+        "embeddings": false,
+        "no_op_offload": 0,
+        "no_host": false,
+        "fit_target": 0,
+        "fit_min_ctx": 0,
+        "n_prompt": 2048,
+        "n_gen": 0,
+        "n_depth": 0,
+        "test_time": "2026-10-24T05:03:39Z",
+        "avg_ns": 2145420234,
+        "stddev_ns": 0,
+        "avg_ts": 954.591538,
+        "stddev_ts": 0.0,
+        "samples_ns": [
+          2145420234
+        ],
+        "samples_ts": [
+          954.592
+        ]
+      }
+    },
+    "27b-prefill-steady": {
+      "tokens_per_call": 1024,
+      "context_index": null,
+      "decode_calls": 2,
+      "kernel_dispatches": 18774,
+      "traced_gpu_span_ns": 8410055533,
+      "traced_gpu_active_ns": 8269215316,
+      "kernel_sum_ns": 8269215316,
+      "kernels": [
+        {
+          "name": "void mul_mat_q<(ggml_type)142, 64, false>(char const*, int const*, int const*, int const*, float*, float*, float const*, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 3176,
+          "total_ns": 6843071800,
+          "percent_kernel_time": 82.75358106541775,
+          "vgpr_count": 248
+        },
+        {
+          "name": "void gated_delta_net_cuda<128, false, false, true, false>(float const*, float const*, float const*, float const*, float const*, float const*, float const*, float const*, float*, float*, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float, long, int, int const*, long)",
+          "calls": 384,
+          "total_ns": 465664653,
+          "percent_kernel_time": 5.631304001710917,
+          "vgpr_count": 40
+        },
+        {
+          "name": "Cijk_Alik_Bljk_BSS_BH_MT128x32x16_SE_1LDSB0_APM1_ABV0_ACED0_AF0EM1_AF1EM1_AMAS0_ASE_ASGT_ASLT_ASM_ASAE01_ASCE01_ASEM1_AAC0_BL1_BS1_CLR0_DTLA0_DTLB0_DTVA0_DTVB0_DVO0_ETSP_EPS0_ELFLR0_EMLL0_FSSC10_FL0_GLVWA1_GLVWB1_GRCGA1_GRCGB1_GRPM1_GRVW1_GSU3_GSUAMB_GLS0_ISA000_IU1_K1_KLS_LBSPPA0_LBSPPB0_LPA0_LPB0_LDL1_LRVW1_LWPMn1_LDW0_FMA_MIAV0_MDA2_MO40_MMFSC_MKFGSU256_NTA0_NTB0_NTC0_NTD0_NEPBS0_NLCA1_NLCB1_ONLL1_OPLV0_PK0_PAP0_PGR0_PLR1_PKA0_SIA1_SLW1_SS0_SU32_SUM0_SUS256_SCIUI1_SPO0_SRVW0_SSO0_SVW4_SNLL0_TSGRA0_TSGRB0_TT8_2_TLDS0_UMLDSA0_UMLDSB0_U64SL1_USFGROn1_VAW1_VSn1_VW1_VWB1_VFLRP0_WSGRA0_WSGRB0_WS64_WG16_16_1_WGM8",
+          "calls": 768,
+          "total_ns": 231191490,
+          "percent_kernel_time": 2.79580928982065,
+          "vgpr_count": 64
+        },
+        {
+          "name": "void flash_attn_tile<256, 256, 16, 2, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+          "calls": 128,
+          "total_ns": 128980590,
+          "percent_kernel_time": 1.5597681892553588,
+          "vgpr_count": 208
+        },
+        {
+          "name": "void concat_non_cont<unsigned int, 0>(char const*, char const*, char*, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 384,
+          "total_ns": 124364011,
+          "percent_kernel_time": 1.5039396877158302,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+          "calls": 896,
+          "total_ns": 71078527,
+          "percent_kernel_time": 0.8595558863060568,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 888,
+          "total_ns": 70153599,
+          "percent_kernel_time": 0.8483706895896239,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<1024, 256, float, true>(float const*, float*, long, float, float const*, int)",
+          "calls": 2038,
+          "total_ns": 65251253,
+          "percent_kernel_time": 0.789086394615293,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void quantize_mmq_q8_1<(mmq_q8_1_ds_layout)0, false, false, false>(float const*, int const*, void*, long, long, long, long, long, int, int, int, float const*, float const*, float const*)",
+          "calls": 3176,
+          "total_ns": 62896965,
+          "percent_kernel_time": 0.7606158818757743,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 640,
+          "total_ns": 38222214,
+          "percent_kernel_time": 0.462222986575816,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 1010,
+          "total_ns": 31603763,
+          "percent_kernel_time": 0.3821857551447509,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void ssm_conv_long_token_f32<true, 128ul, 4ul, 32l>(float const*, float const*, float const*, int, int, int, int, float*, int, int, int, long)",
+          "calls": 384,
+          "total_ns": 30525172,
+          "percent_kernel_time": 0.3691423047231245,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 1020,
+          "total_ns": 28984835,
+          "percent_kernel_time": 0.35051493875020534,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+          "calls": 256,
+          "total_ns": 26670241,
+          "percent_kernel_time": 0.32252444737284913,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void convert_unary<float, __hip_bfloat16>(void const*, __hip_bfloat16*, long, long, long, HIP_vector_type<unsigned int, 3u>, long, long, long)",
+          "calls": 768,
+          "total_ns": 20897118,
+          "percent_kernel_time": 0.2527098062081711,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void l2_norm_f32<32>(float const*, float*, int, long, long, long, float)",
+          "calls": 384,
+          "total_ns": 7180055,
+          "percent_kernel_time": 0.08682873435533119,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 128,
+          "total_ns": 4714285,
+          "percent_kernel_time": 0.05701006467782245,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda<64, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 256,
+          "total_ns": 3237365,
+          "percent_kernel_time": 0.03914960339388023,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda<256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 256,
+          "total_ns": 3130885,
+          "percent_kernel_time": 0.03786193587125601,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 2,
+          "total_ns": 2410362,
+          "percent_kernel_time": 0.02914861819278331,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void dequantize_block_q8_0_f16<false>(void const*, __half*, long)",
+          "calls": 256,
+          "total_ns": 2350321,
+          "percent_kernel_time": 0.028422539626612377,
+          "vgpr_count": 64
+        },
+        {
+          "name": "Cijk_S_PostGSU3_VW2",
+          "calls": 768,
+          "total_ns": 1612281,
+          "percent_kernel_time": 0.019497388063900306,
+          "vgpr_count": 16
+        },
+        {
+          "name": "_ZL16k_set_rows_quantIl10block_q8_0Li32ETnPFvPKfPT0_EXadL_ZL23quantize_f32_q8_0_blockS2_PS0_EEEvS2_PKT_S4_llllllllllllll15HIP_vector_typeIjLj3EESC_SC_SC_SC_",
+          "calls": 256,
+          "total_ns": 1541844,
+          "percent_kernel_time": 0.018645590193022372,
+          "vgpr_count": 80
+        },
+        {
+          "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 388,
+          "total_ns": 1537925,
+          "percent_kernel_time": 0.018598197546317224,
+          "vgpr_count": 16
+        },
+        {
+          "name": "scale_f32(float const*, float*, float, float, long)",
+          "calls": 96,
+          "total_ns": 870961,
+          "percent_kernel_time": 0.010532571310784333,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, true, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 2,
+          "total_ns": 344880,
+          "percent_kernel_time": 0.004170649654420004,
+          "vgpr_count": 64
+        },
+        {
+          "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 8,
+          "total_ns": 224920,
+          "percent_kernel_time": 0.0027199678736724285,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void fwht_cuda_block<1024, 256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 8,
+          "total_ns": 181240,
+          "percent_kernel_time": 0.002191743630732665,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 2,
+          "total_ns": 176441,
+          "percent_kernel_time": 0.002133709103675249,
+          "vgpr_count": 40
+        },
+        {
+          "name": "__amd_rocclr_copyBuffer",
+          "calls": 42,
+          "total_ns": 132480,
+          "percent_kernel_time": 0.0016020867148502727,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 6,
+          "total_ns": 12840,
+          "percent_kernel_time": 0.00015527470877624926,
+          "vgpr_count": 16
+        }
+      ],
+      "hip_api_ns": {
+        "hipStreamSynchronize": 5323793831,
+        "hipLaunchKernel": 1030446183,
+        "hipExtModuleLaunchKernel": 90125362,
+        "hipGetDevice": 2054511,
+        "hipGetLastError": 1419282,
+        "hipMemcpyAsync": 715779,
+        "hipGetDevicePropertiesR0600": 331318,
+        "hipOccupancyMaxActiveBlocksPerMultiprocessor": 124237,
+        "hipDeviceGetAttribute": 12035
+      },
+      "benchmark": {
+        "build_commit": "b87ca7225",
+        "build_number": 10794,
+        "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+        "gpu_info": "AMD Radeon RX 6700",
+        "backends": "ROCm",
+        "model_filename": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "model_type": "qwen35 27B PQ2_0 - 2.13 bpw (group 128)",
+        "model_size": 7195047936,
+        "model_n_params": 26895998464,
+        "n_batch": 1024,
+        "n_ubatch": 256,
+        "n_threads": 6,
+        "cpu_mask": "0x0",
+        "cpu_strict": false,
+        "poll": 50,
+        "type_k": "q8_0",
+        "type_v": "q8_0",
+        "n_gpu_layers": 99,
+        "n_cpu_moe": 0,
+        "split_mode": "layer",
+        "main_gpu": 0,
+        "no_kv_offload": false,
+        "flash_attn": 1,
+        "devices": "auto",
+        "tensor_split": "0.00",
+        "tensor_buft_overrides": "none",
+        "load_mode": "auto",
+        "embeddings": false,
+        "no_op_offload": 0,
+        "no_host": false,
+        "fit_target": 0,
+        "fit_min_ctx": 0,
+        "n_prompt": 2048,
+        "n_gen": 0,
+        "n_depth": 0,
+        "test_time": "2026-10-24T05:05:31Z",
+        "avg_ns": 8413626984,
+        "stddev_ns": 0,
+        "avg_ts": 243.414642,
+        "stddev_ts": 0.0,
+        "samples_ns": [
+          8413626984
+        ],
+        "samples_ts": [
+          243.415
+        ]
+      }
+    },
+    "9b-decode": {
+      "tokens_per_call": 1,
+      "context_index": null,
+      "decode_calls": 62,
+      "kernel_dispatches": 58776,
+      "traced_gpu_span_ns": 3349525419,
+      "traced_gpu_active_ns": 648069498,
+      "kernel_sum_ns": 648069498,
+      "kernels": [
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 7564,
+          "total_ns": 260494350,
+          "percent_kernel_time": 40.1954344100299,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, true, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 1240,
+          "total_ns": 119393671,
+          "percent_kernel_time": 18.42297336450172,
+          "vgpr_count": 64
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 2418,
+          "total_ns": 104236995,
+          "percent_kernel_time": 16.084230984745403,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void fwht_cuda_block<4096, 256, float, true>(float const*, float*, long, float, float const*, int)",
+          "calls": 7998,
+          "total_ns": 31085176,
+          "percent_kernel_time": 4.7965806284559935,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 11222,
+          "total_ns": 19437452,
+          "percent_kernel_time": 2.9992851167946806,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void flash_attn_tile<256, 256, 1, 4, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+          "calls": 496,
+          "total_ns": 19181804,
+          "percent_kernel_time": 2.959837495700191,
+          "vgpr_count": 160
+        },
+        {
+          "name": "void gated_delta_net_cuda<128, false, false, true, false>(float const*, float const*, float const*, float const*, float const*, float const*, float const*, float const*, float*, float*, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float, long, int, int const*, long)",
+          "calls": 1488,
+          "total_ns": 16637565,
+          "percent_kernel_time": 2.567250125387015,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 4030,
+          "total_ns": 15037612,
+          "percent_kernel_time": 2.3203702760903586,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void mul_mat_vec_f<float, float, 1, 256, false, false>(float const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int)",
+          "calls": 2976,
+          "total_ns": 13983234,
+          "percent_kernel_time": 2.157675070830135,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+          "calls": 3472,
+          "total_ns": 9681704,
+          "percent_kernel_time": 1.4939298994750714,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 2480,
+          "total_ns": 5295135,
+          "percent_kernel_time": 0.8170628329741265,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 1612,
+          "total_ns": 5118173,
+          "percent_kernel_time": 0.789756810927707,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 2232,
+          "total_ns": 4156447,
+          "percent_kernel_time": 0.6413582205036905,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+          "calls": 992,
+          "total_ns": 4018259,
+          "percent_kernel_time": 0.6200351987557976,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void concat_cont<unsigned int, 0>(unsigned int const*, unsigned int const*, unsigned int*, long, long, long, long, long, long)",
+          "calls": 1488,
+          "total_ns": 3671615,
+          "percent_kernel_time": 0.5665464909752627,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void ssm_conv_f32<true, 128ul, 4ul>(float const*, float const*, float const*, int, int, int, int, float*, int, int, int, long)",
+          "calls": 1488,
+          "total_ns": 3577776,
+          "percent_kernel_time": 0.5520667167705523,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 1550,
+          "total_ns": 3536572,
+          "percent_kernel_time": 0.5457087566864627,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void l2_norm_f32<32>(float const*, float*, int, long, long, long, float)",
+          "calls": 1488,
+          "total_ns": 3198616,
+          "percent_kernel_time": 0.49356064586764425,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void flash_attn_combine_results<256>(float const*, HIP_vector_type<float, 2u> const*, float*, int)",
+          "calls": 496,
+          "total_ns": 1842725,
+          "percent_kernel_time": 0.28434064644097784,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void k_set_rows<float, long, __half>(float const*, long const*, __half*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 992,
+          "total_ns": 1666248,
+          "percent_kernel_time": 0.25710946204723245,
+          "vgpr_count": 24
+        },
+        {
+          "name": "__amd_rocclr_copyBuffer",
+          "calls": 434,
+          "total_ns": 1245361,
+          "percent_kernel_time": 0.19216472983889762,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 496,
+          "total_ns": 1056124,
+          "percent_kernel_time": 0.16296462080985025,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<4096, 256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 62,
+          "total_ns": 340003,
+          "percent_kernel_time": 0.052463972004434624,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 62,
+          "total_ns": 176881,
+          "percent_kernel_time": 0.027293523386900706,
+          "vgpr_count": 24
+        }
+      ],
+      "hip_api_ns": {
+        "hipGraphLaunch": 3109742116,
+        "hipStreamSynchronize": 7805965,
+        "hipMemcpyAsync": 3124374,
+        "hipGetDevice": 57567
+      },
+      "benchmark": {
+        "build_commit": "b87ca7225",
+        "build_number": 10794,
+        "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+        "gpu_info": "AMD Radeon RX 6700",
+        "backends": "ROCm",
+        "model_filename": "Ternary-Bonsai-2-9B-PQ2_0.gguf",
+        "model_type": "qwen35 9B PQ2_0 - 2.13 bpw (group 128)",
+        "model_size": 2405812224,
+        "model_n_params": 8953803264,
+        "n_batch": 2048,
+        "n_ubatch": 512,
+        "n_threads": 6,
+        "cpu_mask": "0x0",
+        "cpu_strict": false,
+        "poll": 50,
+        "type_k": "f16",
+        "type_v": "f16",
+        "n_gpu_layers": 99,
+        "n_cpu_moe": 0,
+        "split_mode": "layer",
+        "main_gpu": 0,
+        "no_kv_offload": false,
+        "flash_attn": 1,
+        "devices": "auto",
+        "tensor_split": "0.00",
+        "tensor_buft_overrides": "none",
+        "load_mode": "auto",
+        "embeddings": false,
+        "no_op_offload": 0,
+        "no_host": false,
+        "fit_target": 0,
+        "fit_min_ctx": 0,
+        "n_prompt": 0,
+        "n_gen": 64,
+        "n_depth": 2048,
+        "test_time": "2026-10-24T04:54:51Z",
+        "avg_ns": 3452129266,
+        "stddev_ns": 0,
+        "avg_ts": 18.539283,
+        "stddev_ts": 0.0,
+        "samples_ns": [
+          3452129266
+        ],
+        "samples_ts": [
+          18.5393
+        ]
+      }
+    },
+    "27b-decode-clean": {
+      "tokens_per_call": 1,
+      "context_index": null,
+      "decode_calls": 62,
+      "kernel_dispatches": 120528,
+      "traced_gpu_span_ns": 6897827319,
+      "traced_gpu_active_ns": 2016040007,
+      "kernel_sum_ns": 2016040007,
+      "kernels": [
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 15004,
+          "total_ns": 793944939,
+          "percent_kernel_time": 39.38140792064153,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, true, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 2480,
+          "total_ns": 411171330,
+          "percent_kernel_time": 20.394998540324107,
+          "vgpr_count": 64
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 4898,
+          "total_ns": 388216950,
+          "percent_kernel_time": 19.25641101625222,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void flash_attn_ext_vec<256, 1, (ggml_type)8, (ggml_type)8, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+          "calls": 992,
+          "total_ns": 118882628,
+          "percent_kernel_time": 5.896838732724613,
+          "vgpr_count": 160
+        },
+        {
+          "name": "void gated_delta_net_cuda<128, false, false, true, false>(float const*, float const*, float const*, float const*, float const*, float const*, float const*, float const*, float*, float*, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float, long, int, int const*, long)",
+          "calls": 2976,
+          "total_ns": 47707097,
+          "percent_kernel_time": 2.3663765021702767,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 22382,
+          "total_ns": 39917804,
+          "percent_kernel_time": 1.9800105087894717,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<1024, 256, float, true>(float const*, float*, long, float, float const*, int)",
+          "calls": 15934,
+          "total_ns": 37624674,
+          "percent_kernel_time": 1.8662662382374042,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 7998,
+          "total_ns": 35928881,
+          "percent_kernel_time": 1.782151191208975,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void mul_mat_vec_f<__hip_bfloat16, float, 1, 256, false, false>(__hip_bfloat16 const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int)",
+          "calls": 5952,
+          "total_ns": 29957561,
+          "percent_kernel_time": 1.4859606404626275,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+          "calls": 6944,
+          "total_ns": 23027971,
+          "percent_kernel_time": 1.1422377988553478,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 4960,
+          "total_ns": 10864497,
+          "percent_kernel_time": 0.5389028472786651,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 3100,
+          "total_ns": 10331949,
+          "percent_kernel_time": 0.5124873000598147,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 4464,
+          "total_ns": 8708618,
+          "percent_kernel_time": 0.43196652694204196,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+          "calls": 1984,
+          "total_ns": 8410057,
+          "percent_kernel_time": 0.4171572474156759,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void concat_cont<unsigned int, 0>(unsigned int const*, unsigned int const*, unsigned int*, long, long, long, long, long, long)",
+          "calls": 2976,
+          "total_ns": 7949456,
+          "percent_kernel_time": 0.3943104289794979,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void ssm_conv_f32<true, 128ul, 4ul>(float const*, float const*, float const*, int, int, int, int, float*, int, int, int, long)",
+          "calls": 2976,
+          "total_ns": 7487532,
+          "percent_kernel_time": 0.37139798684560527,
+          "vgpr_count": 24
+        },
+        {
+          "name": "_ZL16k_set_rows_quantIl10block_q8_0Li32ETnPFvPKfPT0_EXadL_ZL23quantize_f32_q8_0_blockS2_PS0_EEEvS2_PKT_S4_llllllllllllll15HIP_vector_typeIjLj3EESC_SC_SC_SC_",
+          "calls": 1984,
+          "total_ns": 7118570,
+          "percent_kernel_time": 0.3530966635227095,
+          "vgpr_count": 80
+        },
+        {
+          "name": "void l2_norm_f32<32>(float const*, float*, int, long, long, long, float)",
+          "calls": 2976,
+          "total_ns": 6661894,
+          "percent_kernel_time": 0.330444533683304,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 3038,
+          "total_ns": 6633731,
+          "percent_kernel_time": 0.32904758719899746,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void fwht_cuda<256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 1984,
+          "total_ns": 4314449,
+          "percent_kernel_time": 0.21400612016723733,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void fwht_cuda<64, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 1984,
+          "total_ns": 3613125,
+          "percent_kernel_time": 0.17921891368498025,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void flash_attn_combine_results<256>(float const*, HIP_vector_type<float, 2u> const*, float*, int)",
+          "calls": 992,
+          "total_ns": 3587649,
+          "percent_kernel_time": 0.17795524828590367,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 992,
+          "total_ns": 2282045,
+          "percent_kernel_time": 0.11319443027302979,
+          "vgpr_count": 16
+        },
+        {
+          "name": "__amd_rocclr_copyBuffer",
+          "calls": 434,
+          "total_ns": 1333760,
+          "percent_kernel_time": 0.06615741728184861,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 62,
+          "total_ns": 182640,
+          "percent_kernel_time": 0.009059344029178285,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void fwht_cuda_block<1024, 256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 62,
+          "total_ns": 180200,
+          "percent_kernel_time": 0.00893831468494266,
+          "vgpr_count": 16
+        }
+      ],
+      "hip_api_ns": {
+        "hipGraphLaunch": 6587394887,
+        "hipStreamSynchronize": 10286334,
+        "hipMemcpyAsync": 4607180,
+        "hipGetDevice": 79402
+      },
+      "benchmark": {
+        "build_commit": "b87ca7225",
+        "build_number": 10794,
+        "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+        "gpu_info": "AMD Radeon RX 6700",
+        "backends": "ROCm",
+        "model_filename": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "model_type": "qwen35 27B PQ2_0 - 2.13 bpw (group 128)",
+        "model_size": 7195047936,
+        "model_n_params": 26895998464,
+        "n_batch": 1024,
+        "n_ubatch": 256,
+        "n_threads": 6,
+        "cpu_mask": "0x0",
+        "cpu_strict": false,
+        "poll": 50,
+        "type_k": "q8_0",
+        "type_v": "q8_0",
+        "n_gpu_layers": 99,
+        "n_cpu_moe": 0,
+        "split_mode": "layer",
+        "main_gpu": 0,
+        "no_kv_offload": false,
+        "flash_attn": 1,
+        "devices": "auto",
+        "tensor_split": "0.00",
+        "tensor_buft_overrides": "none",
+        "load_mode": "auto",
+        "embeddings": false,
+        "no_op_offload": 0,
+        "no_host": false,
+        "fit_target": 0,
+        "fit_min_ctx": 0,
+        "n_prompt": 0,
+        "n_gen": 64,
+        "n_depth": 2048,
+        "test_time": "2026-10-24T04:55:53Z",
+        "avg_ns": 7147114283,
+        "stddev_ns": 0,
+        "avg_ts": 8.954663,
+        "stddev_ts": 0.0,
+        "samples_ns": [
+          7147114283
+        ],
+        "samples_ts": [
+          8.95466
+        ]
+      }
+    },
+    "9b-decode-32k": {
+      "tokens_per_call": 1,
+      "context_index": null,
+      "decode_calls": 30,
+      "kernel_dispatches": 28410,
+      "traced_gpu_span_ns": 1644730064,
+      "traced_gpu_active_ns": 414925283,
+      "kernel_sum_ns": 414925283,
+      "kernels": [
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 3660,
+          "total_ns": 125728156,
+          "percent_kernel_time": 30.301396697486858,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void flash_attn_tile<256, 256, 1, 4, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+          "calls": 240,
+          "total_ns": 112334099,
+          "percent_kernel_time": 27.073331899131343,
+          "vgpr_count": 160
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, true, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 600,
+          "total_ns": 55725423,
+          "percent_kernel_time": 13.430230762775668,
+          "vgpr_count": 64
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 1170,
+          "total_ns": 50003074,
+          "percent_kernel_time": 12.051103186209069,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void fwht_cuda_block<4096, 256, float, true>(float const*, float*, long, float, float const*, int)",
+          "calls": 3870,
+          "total_ns": 15417877,
+          "percent_kernel_time": 3.715820084166816,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 5430,
+          "total_ns": 9530073,
+          "percent_kernel_time": 2.2968166536142363,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void gated_delta_net_cuda<128, false, false, true, false>(float const*, float const*, float const*, float const*, float const*, float const*, float const*, float const*, float*, float*, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float, long, int, int const*, long)",
+          "calls": 720,
+          "total_ns": 8008757,
+          "percent_kernel_time": 1.9301684732477487,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 1950,
+          "total_ns": 7795839,
+          "percent_kernel_time": 1.878853692316455,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void mul_mat_vec_f<float, float, 1, 256, false, false>(float const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int)",
+          "calls": 1440,
+          "total_ns": 6813874,
+          "percent_kernel_time": 1.6421930114102012,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+          "calls": 1680,
+          "total_ns": 4714277,
+          "percent_kernel_time": 1.1361749194733934,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 1200,
+          "total_ns": 2619038,
+          "percent_kernel_time": 0.6312071371172626,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 780,
+          "total_ns": 2444280,
+          "percent_kernel_time": 0.5890891927161739,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 1080,
+          "total_ns": 1936640,
+          "percent_kernel_time": 0.46674427405282987,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+          "calls": 480,
+          "total_ns": 1863800,
+          "percent_kernel_time": 0.44918930621058345,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void concat_cont<unsigned int, 0>(unsigned int const*, unsigned int const*, unsigned int*, long, long, long, long, long, long)",
+          "calls": 720,
+          "total_ns": 1797560,
+          "percent_kernel_time": 0.4332249861958882,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 750,
+          "total_ns": 1717320,
+          "percent_kernel_time": 0.4138865647288117,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void ssm_conv_f32<true, 128ul, 4ul>(float const*, float const*, float const*, int, int, int, int, float*, int, int, int, long)",
+          "calls": 720,
+          "total_ns": 1649678,
+          "percent_kernel_time": 0.39758435255438507,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void l2_norm_f32<32>(float const*, float*, int, long, long, long, float)",
+          "calls": 720,
+          "total_ns": 1632399,
+          "percent_kernel_time": 0.3934199883404068,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void flash_attn_combine_results<256>(float const*, HIP_vector_type<float, 2u> const*, float*, int)",
+          "calls": 240,
+          "total_ns": 974280,
+          "percent_kernel_time": 0.23480854021614297,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void k_set_rows<float, long, __half>(float const*, long const*, __half*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 480,
+          "total_ns": 948120,
+          "percent_kernel_time": 0.228503790645122,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 240,
+          "total_ns": 515919,
+          "percent_kernel_time": 0.12434021765793433,
+          "vgpr_count": 16
+        },
+        {
+          "name": "__amd_rocclr_copyBuffer",
+          "calls": 180,
+          "total_ns": 505480,
+          "percent_kernel_time": 0.12182434301069092,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<4096, 256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 30,
+          "total_ns": 164920,
+          "percent_kernel_time": 0.03974691510905109,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 30,
+          "total_ns": 84400,
+          "percent_kernel_time": 0.020341011612926948,
+          "vgpr_count": 24
+        }
+      ],
+      "hip_api_ns": {
+        "hipGraphLaunch": 1502179981,
+        "hipStreamSynchronize": 3781438,
+        "hipMemcpyAsync": 1676187,
+        "hipGetDevice": 30621
+      },
+      "benchmark": {
+        "build_commit": "b87ca7225",
+        "build_number": 10794,
+        "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+        "gpu_info": "AMD Radeon RX 6700",
+        "backends": "ROCm",
+        "model_filename": "Ternary-Bonsai-2-9B-PQ2_0.gguf",
+        "model_type": "qwen35 9B PQ2_0 - 2.13 bpw (group 128)",
+        "model_size": 2405812224,
+        "model_n_params": 8953803264,
+        "n_batch": 2048,
+        "n_ubatch": 512,
+        "n_threads": 6,
+        "cpu_mask": "0x0",
+        "cpu_strict": false,
+        "poll": 50,
+        "type_k": "f16",
+        "type_v": "f16",
+        "n_gpu_layers": 99,
+        "n_cpu_moe": 0,
+        "split_mode": "layer",
+        "main_gpu": 0,
+        "no_kv_offload": false,
+        "flash_attn": 1,
+        "devices": "auto",
+        "tensor_split": "0.00",
+        "tensor_buft_overrides": "none",
+        "load_mode": "auto",
+        "embeddings": false,
+        "no_op_offload": 0,
+        "no_host": false,
+        "fit_target": 0,
+        "fit_min_ctx": 0,
+        "n_prompt": 0,
+        "n_gen": 32,
+        "n_depth": 32768,
+        "test_time": "2026-10-24T05:06:12Z",
+        "avg_ns": 1758865777,
+        "stddev_ns": 0,
+        "avg_ts": 18.193543,
+        "stddev_ts": 0.0,
+        "samples_ns": [
+          1758865777
+        ],
+        "samples_ts": [
+          18.1935
+        ]
+      }
+    },
+    "27b-decode-8k": {
+      "tokens_per_call": 1,
+      "context_index": null,
+      "decode_calls": 30,
+      "kernel_dispatches": 58290,
+      "traced_gpu_span_ns": 3341257188,
+      "traced_gpu_active_ns": 1113887844,
+      "kernel_sum_ns": 1113887844,
+      "kernels": [
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 7260,
+          "total_ns": 383890628,
+          "percent_kernel_time": 34.46402885782817,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, true, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 1200,
+          "total_ns": 197669439,
+          "percent_kernel_time": 17.745901444634132,
+          "vgpr_count": 64
+        },
+        {
+          "name": "void flash_attn_ext_vec<256, 1, (ggml_type)8, (ggml_type)8, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+          "calls": 480,
+          "total_ns": 197264619,
+          "percent_kernel_time": 17.709558467899036,
+          "vgpr_count": 160
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 2370,
+          "total_ns": 187510399,
+          "percent_kernel_time": 16.83386707288638,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void gated_delta_net_cuda<128, false, false, true, false>(float const*, float const*, float const*, float const*, float const*, float const*, float const*, float const*, float*, float*, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float, long, int, int const*, long)",
+          "calls": 1440,
+          "total_ns": 22999793,
+          "percent_kernel_time": 2.064821258611383,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 10830,
+          "total_ns": 19369393,
+          "percent_kernel_time": 1.7388997558716512,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<1024, 256, float, true>(float const*, float*, long, float, float const*, int)",
+          "calls": 7710,
+          "total_ns": 18006357,
+          "percent_kernel_time": 1.616532319388522,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 3870,
+          "total_ns": 17440431,
+          "percent_kernel_time": 1.5657259475398315,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void mul_mat_vec_f<__hip_bfloat16, float, 1, 256, false, false>(__hip_bfloat16 const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int)",
+          "calls": 2880,
+          "total_ns": 14510959,
+          "percent_kernel_time": 1.302730708317165,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+          "calls": 3360,
+          "total_ns": 11254037,
+          "percent_kernel_time": 1.0103384340371704,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 2400,
+          "total_ns": 5628199,
+          "percent_kernel_time": 0.5052751971678757,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 1500,
+          "total_ns": 5016757,
+          "percent_kernel_time": 0.4503825970471763,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 2160,
+          "total_ns": 4233358,
+          "percent_kernel_time": 0.38005244628560647,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+          "calls": 960,
+          "total_ns": 4161239,
+          "percent_kernel_time": 0.3735779165213693,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void concat_cont<unsigned int, 0>(unsigned int const*, unsigned int const*, unsigned int*, long, long, long, long, long, long)",
+          "calls": 1440,
+          "total_ns": 4004400,
+          "percent_kernel_time": 0.35949759408632165,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void ssm_conv_f32<true, 128ul, 4ul>(float const*, float const*, float const*, int, int, int, int, float*, int, int, int, long)",
+          "calls": 1440,
+          "total_ns": 3491680,
+          "percent_kernel_time": 0.3134678252220876,
+          "vgpr_count": 24
+        },
+        {
+          "name": "_ZL16k_set_rows_quantIl10block_q8_0Li32ETnPFvPKfPT0_EXadL_ZL23quantize_f32_q8_0_blockS2_PS0_EEEvS2_PKT_S4_llllllllllllll15HIP_vector_typeIjLj3EESC_SC_SC_SC_",
+          "calls": 960,
+          "total_ns": 3463999,
+          "percent_kernel_time": 0.3109827455842134,
+          "vgpr_count": 80
+        },
+        {
+          "name": "void l2_norm_f32<32>(float const*, float*, int, long, long, long, float)",
+          "calls": 1440,
+          "total_ns": 3307600,
+          "percent_kernel_time": 0.29694192443310297,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 1470,
+          "total_ns": 3198480,
+          "percent_kernel_time": 0.2871456060166862,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void fwht_cuda<256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 960,
+          "total_ns": 2095640,
+          "percent_kernel_time": 0.1881374333410896,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void flash_attn_combine_results<256>(float const*, HIP_vector_type<float, 2u> const*, float*, int)",
+          "calls": 480,
+          "total_ns": 1769558,
+          "percent_kernel_time": 0.1588632113665476,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void fwht_cuda<64, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 960,
+          "total_ns": 1757519,
+          "percent_kernel_time": 0.1577824023726396,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 480,
+          "total_ns": 1102280,
+          "percent_kernel_time": 0.09895789831422203,
+          "vgpr_count": 16
+        },
+        {
+          "name": "__amd_rocclr_copyBuffer",
+          "calls": 180,
+          "total_ns": 566600,
+          "percent_kernel_time": 0.05086688063363047,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<1024, 256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 30,
+          "total_ns": 87880,
+          "percent_kernel_time": 0.007889483709995492,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 30,
+          "total_ns": 86600,
+          "percent_kernel_time": 0.007774570883996468,
+          "vgpr_count": 24
+        }
+      ],
+      "hip_api_ns": {
+        "hipGraphLaunch": 3174668947,
+        "hipStreamSynchronize": 4940672,
+        "hipMemcpyAsync": 2125864,
+        "hipGetDevice": 36939
+      },
+      "benchmark": {
+        "build_commit": "b87ca7225",
+        "build_number": 10794,
+        "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+        "gpu_info": "AMD Radeon RX 6700",
+        "backends": "ROCm",
+        "model_filename": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+        "model_type": "qwen35 27B PQ2_0 - 2.13 bpw (group 128)",
+        "model_size": 7195047936,
+        "model_n_params": 26895998464,
+        "n_batch": 1024,
+        "n_ubatch": 256,
+        "n_threads": 6,
+        "cpu_mask": "0x0",
+        "cpu_strict": false,
+        "poll": 50,
+        "type_k": "q8_0",
+        "type_v": "q8_0",
+        "n_gpu_layers": 99,
+        "n_cpu_moe": 0,
+        "split_mode": "layer",
+        "main_gpu": 0,
+        "no_kv_offload": false,
+        "flash_attn": 1,
+        "devices": "auto",
+        "tensor_split": "0.00",
+        "tensor_buft_overrides": "none",
+        "load_mode": "auto",
+        "embeddings": false,
+        "no_op_offload": 0,
+        "no_host": false,
+        "fit_target": 0,
+        "fit_min_ctx": 0,
+        "n_prompt": 0,
+        "n_gen": 32,
+        "n_depth": 8192,
+        "test_time": "2026-10-24T05:07:18Z",
+        "avg_ns": 3529012444,
+        "stddev_ns": 0,
+        "avg_ts": 9.067693,
+        "stddev_ts": 0.0,
+        "samples_ns": [
+          3529012444
+        ],
+        "samples_ts": [
+          9.06769
+        ]
+      }
+    },
+    "9b-mtp-agent": {
+      "target": {
+        "tokens_per_call": 2,
+        "context_index": 0,
+        "decode_calls": 64,
+        "kernel_dispatches": 68385,
+        "traced_gpu_span_ns": 4361769482,
+        "traced_gpu_active_ns": 828251696,
+        "kernel_sum_ns": 828251696,
+        "kernels": [
+          {
+            "name": "void mul_mat_vec_q<(ggml_type)142, 2, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+            "calls": 12864,
+            "total_ns": 571107184,
+            "percent_kernel_time": 68.95333710249353,
+            "vgpr_count": 56
+          },
+          {
+            "name": "void flash_attn_tile<256, 256, 2, 4, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+            "calls": 512,
+            "total_ns": 47509022,
+            "percent_kernel_time": 5.736060937688681,
+            "vgpr_count": 152
+          },
+          {
+            "name": "void concat_non_cont<unsigned int, 0>(char const*, char const*, char*, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long, long, long, long, long, unsigned long, unsigned long, unsigned long, unsigned long)",
+            "calls": 1536,
+            "total_ns": 41687619,
+            "percent_kernel_time": 5.033206596657545,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void fwht_cuda_block<4096, 256, float, true>(float const*, float*, long, float, float const*, int)",
+            "calls": 8256,
+            "total_ns": 31270326,
+            "percent_kernel_time": 3.7754617528727645,
+            "vgpr_count": 56
+          },
+          {
+            "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+            "calls": 12864,
+            "total_ns": 23308832,
+            "percent_kernel_time": 2.814220859742133,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void gated_delta_net_cuda<128, false, true, true, false>(float const*, float const*, float const*, float const*, float const*, float const*, float const*, float const*, float*, float*, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float, long, int, int const*, long)",
+            "calls": 1536,
+            "total_ns": 22172263,
+            "percent_kernel_time": 2.6769957860732227,
+            "vgpr_count": 40
+          },
+          {
+            "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+            "calls": 5120,
+            "total_ns": 15680380,
+            "percent_kernel_time": 1.8931902072434754,
+            "vgpr_count": 32
+          },
+          {
+            "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+            "calls": 4160,
+            "total_ns": 15544903,
+            "percent_kernel_time": 1.8768332229288909,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void mul_mat_vec_f<float, float, 2, 256, false, false>(float const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int)",
+            "calls": 3072,
+            "total_ns": 15441823,
+            "percent_kernel_time": 1.8643877307557002,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+            "calls": 4096,
+            "total_ns": 8706413,
+            "percent_kernel_time": 1.0511796162986669,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+            "calls": 3584,
+            "total_ns": 6772533,
+            "percent_kernel_time": 0.8176902060940664,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+            "calls": 2560,
+            "total_ns": 5607488,
+            "percent_kernel_time": 0.6770270471018752,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+            "calls": 1600,
+            "total_ns": 5275286,
+            "percent_kernel_time": 0.6369182249160164,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+            "calls": 1024,
+            "total_ns": 4228487,
+            "percent_kernel_time": 0.5105316439943638,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void ssm_conv_f32<true, 128ul, 4ul>(float const*, float const*, float const*, int, int, int, int, float*, int, int, int, long)",
+            "calls": 1536,
+            "total_ns": 4067765,
+            "percent_kernel_time": 0.4911266731653031,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void l2_norm_f32<32>(float const*, float*, int, long, long, long, float)",
+            "calls": 1536,
+            "total_ns": 3545884,
+            "percent_kernel_time": 0.4281167206930778,
+            "vgpr_count": 8
+          },
+          {
+            "name": "void k_set_rows<float, long, __half>(float const*, long const*, __half*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+            "calls": 1024,
+            "total_ns": 1826804,
+            "percent_kernel_time": 0.2205614559948936,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void flash_attn_combine_results<256>(float const*, HIP_vector_type<float, 2u> const*, float*, int)",
+            "calls": 512,
+            "total_ns": 1812042,
+            "percent_kernel_time": 0.21877914754067707,
+            "vgpr_count": 56
+          },
+          {
+            "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+            "calls": 512,
+            "total_ns": 1176761,
+            "percent_kernel_time": 0.1420777048429974,
+            "vgpr_count": 16
+          },
+          {
+            "name": "__amd_rocclr_copyBuffer",
+            "calls": 353,
+            "total_ns": 965761,
+            "percent_kernel_time": 0.11660235706900382,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void fwht_cuda_block<4096, 256, float, false>(float const*, float*, long, float, float const*, int)",
+            "calls": 64,
+            "total_ns": 352000,
+            "percent_kernel_time": 0.04249915837178075,
+            "vgpr_count": 56
+          },
+          {
+            "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+            "calls": 64,
+            "total_ns": 192120,
+            "percent_kernel_time": 0.02319584746132533,
+            "vgpr_count": 24
+          }
+        ],
+        "hip_api_ns": {
+          "hipGraphLaunch": 3473534957,
+          "hipLaunchKernel": 43324398,
+          "hipStreamSynchronize": 12554508,
+          "hipGraphExecUpdate": 7364077,
+          "hipMemcpyAsync": 3751530,
+          "hipGraphDestroy": 2053223,
+          "hipGetLastError": 418888,
+          "hipGetDevice": 357034,
+          "hipOccupancyMaxActiveBlocksPerMultiprocessor": 26661,
+          "hipStreamEndCapture": 22692,
+          "hipStreamBeginCapture": 5140,
+          "hipDeviceGetAttribute": 4648
+        }
+      },
+      "draft": {
+        "tokens_per_call": 3,
+        "context_index": 1,
+        "decode_calls": 64,
+        "kernel_dispatches": 3008,
+        "traced_gpu_span_ns": 4560826414,
+        "traced_gpu_active_ns": 126239822,
+        "kernel_sum_ns": 126239822,
+        "kernels": [
+          {
+            "name": "void mul_mat_vec_q<(ggml_type)8, 3, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+            "calls": 512,
+            "total_ns": 56812768,
+            "percent_kernel_time": 45.0038403888117,
+            "vgpr_count": 32
+          },
+          {
+            "name": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+            "calls": 64,
+            "total_ns": 56444042,
+            "percent_kernel_time": 44.71175664363658,
+            "vgpr_count": 40
+          },
+          {
+            "name": "void flash_attn_tile<256, 256, 4, 4, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+            "calls": 64,
+            "total_ns": 5482523,
+            "percent_kernel_time": 4.342942593819563,
+            "vgpr_count": 104
+          },
+          {
+            "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+            "calls": 320,
+            "total_ns": 1264721,
+            "percent_kernel_time": 1.0018399740772765,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+            "calls": 576,
+            "total_ns": 1137202,
+            "percent_kernel_time": 0.900826682090854,
+            "vgpr_count": 16
+          },
+          {
+            "name": "__amd_rocclr_copyBuffer",
+            "calls": 320,
+            "total_ns": 991881,
+            "percent_kernel_time": 0.7857116591941963,
+            "vgpr_count": 16
+          },
+          {
+            "name": "pad_f32(float const*, unsigned long, unsigned long, unsigned long, unsigned long, float*, int, int, int, int, int, int, int, int, int, int, int, int, bool)",
+            "calls": 64,
+            "total_ns": 679641,
+            "percent_kernel_time": 0.5383729074015963,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+            "calls": 128,
+            "total_ns": 487240,
+            "percent_kernel_time": 0.3859637888272688,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void fwht_cuda_block<4096, 256, float, true>(float const*, float*, long, float, float const*, int)",
+            "calls": 64,
+            "total_ns": 378881,
+            "percent_kernel_time": 0.30012795803847064,
+            "vgpr_count": 56
+          },
+          {
+            "name": "void fwht_cuda_block<4096, 256, float, false>(float const*, float*, long, float, float const*, int)",
+            "calls": 64,
+            "total_ns": 356360,
+            "percent_kernel_time": 0.2822881039867119,
+            "vgpr_count": 56
+          },
+          {
+            "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+            "calls": 128,
+            "total_ns": 334720,
+            "percent_kernel_time": 0.26514612797853915,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+            "calls": 128,
+            "total_ns": 293321,
+            "percent_kernel_time": 0.2323521970745491,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+            "calls": 64,
+            "total_ns": 250360,
+            "percent_kernel_time": 0.19832093869714107,
+            "vgpr_count": 32
+          },
+          {
+            "name": "void k_set_rows<float, long, __half>(float const*, long const*, __half*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+            "calls": 128,
+            "total_ns": 244361,
+            "percent_kernel_time": 0.19356887242759263,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void flash_attn_combine_results<256>(float const*, HIP_vector_type<float, 2u> const*, float*, int)",
+            "calls": 64,
+            "total_ns": 229120,
+            "percent_kernel_time": 0.18149581991647612,
+            "vgpr_count": 56
+          },
+          {
+            "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+            "calls": 64,
+            "total_ns": 191120,
+            "percent_kernel_time": 0.15139438330323374,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+            "calls": 64,
+            "total_ns": 185161,
+            "percent_kernel_time": 0.14667400275643608,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void concat_cont<unsigned int, 0>(unsigned int const*, unsigned int const*, unsigned int*, long, long, long, long, long, long)",
+            "calls": 64,
+            "total_ns": 162880,
+            "percent_kernel_time": 0.12902426304118206,
+            "vgpr_count": 24
+          },
+          {
+            "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+            "calls": 64,
+            "total_ns": 159960,
+            "percent_kernel_time": 0.126711205280375,
+            "vgpr_count": 16
+          },
+          {
+            "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+            "calls": 64,
+            "total_ns": 153560,
+            "percent_kernel_time": 0.12164148964024997,
+            "vgpr_count": 16
+          }
+        ],
+        "hip_api_ns": {
+          "hipGraphLaunch": 43195371,
+          "hipStreamSynchronize": 12486277,
+          "hipMemcpyAsync": 4239424,
+          "hipLaunchKernel": 3080258,
+          "hipGraphExecUpdate": 593733,
+          "hipGraphDestroy": 270882,
+          "hipGetDevice": 80871,
+          "hipGetLastError": 39667,
+          "hipOccupancyMaxActiveBlocksPerMultiprocessor": 14436,
+          "hipStreamBeginCapture": 10731,
+          "hipStreamEndCapture": 8999
+        }
+      },
+      "coding_task": {
+        "passed": true,
+        "wall_seconds": 11.947837775980588,
+        "turn_timings": [
+          {
+            "cache_n": 0,
+            "prompt_n": 468,
+            "prompt_ms": 1005.989,
+            "prompt_per_token_ms": 2.1495491452991455,
+            "prompt_per_second": 465.2138343461012,
+            "predicted_n": 26,
+            "predicted_ms": 955.282,
+            "predicted_per_token_ms": 38.21128,
+            "predicted_per_second": 26.170282701861858,
+            "draft_n": 13,
+            "draft_n_accepted": 13
+          },
+          {
+            "cache_n": 494,
+            "prompt_n": 3523,
+            "prompt_ms": 5115.672,
+            "prompt_per_token_ms": 1.4520783423218846,
+            "prompt_per_second": 688.668077234037,
+            "predicted_n": 102,
+            "predicted_ms": 3295.457,
+            "predicted_per_token_ms": 32.62828712871287,
+            "predicted_per_second": 30.64825303440464,
+            "draft_n": 52,
+            "draft_n_accepted": 49
+          },
+          {
+            "cache_n": 4118,
+            "prompt_n": 21,
+            "prompt_ms": 157.807,
+            "prompt_per_token_ms": 7.514619047619047,
+            "prompt_per_second": 133.07394475530236,
+            "predicted_n": 15,
+            "predicted_ms": 417.337,
+            "predicted_per_token_ms": 29.809785714285713,
+            "predicted_per_second": 33.54603114509378,
+            "draft_n": 7,
+            "draft_n_accepted": 7
+          },
+          {
+            "cache_n": 4153,
+            "prompt_n": 22,
+            "prompt_ms": 141.06,
+            "prompt_per_token_ms": 6.411818181818182,
+            "prompt_per_second": 155.96200198497093,
+            "predicted_n": 27,
+            "predicted_ms": 803.453,
+            "predicted_per_token_ms": 30.90203846153846,
+            "predicted_per_second": 32.36032474830513,
+            "draft_n": 13,
+            "draft_n_accepted": 13
+          }
+        ]
+      }
+    },
+    "27b-agent": {
+      "tokens_per_call": 1,
+      "context_index": null,
+      "decode_calls": 64,
+      "kernel_dispatches": 124416,
+      "traced_gpu_span_ns": 7772561972,
+      "traced_gpu_active_ns": 2180917699,
+      "kernel_sum_ns": 2180917699,
+      "kernels": [
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 15488,
+          "total_ns": 819012090,
+          "percent_kernel_time": 37.55355327601475,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, true, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 2560,
+          "total_ns": 424520287,
+          "percent_kernel_time": 19.46521352890355,
+          "vgpr_count": 64
+        },
+        {
+          "name": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+          "calls": 5056,
+          "total_ns": 401450219,
+          "percent_kernel_time": 18.407398829587837,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void flash_attn_ext_vec<256, 1, (ggml_type)8, (ggml_type)8, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, HIP_vector_type<float, 2u>*, float, float, float, float, unsigned int, float, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+          "calls": 1024,
+          "total_ns": 222069158,
+          "percent_kernel_time": 10.182372223482973,
+          "vgpr_count": 160
+        },
+        {
+          "name": "void gated_delta_net_cuda<128, false, false, true, false>(float const*, float const*, float const*, float const*, float const*, float const*, float const*, float const*, float*, float*, long, long, long, long, long, long, long, long, long, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float, long, int, int const*, long)",
+          "calls": 3072,
+          "total_ns": 48596448,
+          "percent_kernel_time": 2.228256849044903,
+          "vgpr_count": 40
+        },
+        {
+          "name": "void quantize_q8_1<(ggml_cuda_q8_1_layout)0>(float const*, void*, long, long, long, long, long, unsigned int, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 23104,
+          "total_ns": 41242561,
+          "percent_kernel_time": 1.891064528428131,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<1024, 256, float, true>(float const*, float*, long, float, float const*, int)",
+          "calls": 16448,
+          "total_ns": 37952109,
+          "percent_kernel_time": 1.7401898759133323,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rms_norm_f32<1024, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 8256,
+          "total_ns": 36850242,
+          "percent_kernel_time": 1.6896667864585935,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void mul_mat_vec_f<__hip_bfloat16, float, 1, 256, false, false>(__hip_bfloat16 const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, int, int, int, int)",
+          "calls": 6144,
+          "total_ns": 30816900,
+          "percent_kernel_time": 1.4130244352700811,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+          "calls": 7168,
+          "total_ns": 23621726,
+          "percent_kernel_time": 1.0831094640036667,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void rms_norm_f32<256, true, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, float const*, long, long, long, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>)",
+          "calls": 5120,
+          "total_ns": 11720495,
+          "percent_kernel_time": 0.5374111551927939,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_get_rows_float<float, float>(float const*, int const*, float*, long, long, HIP_vector_type<unsigned int, 3u>, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+          "calls": 3200,
+          "total_ns": 11087096,
+          "percent_kernel_time": 0.5083683811215657,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_silu(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 4608,
+          "total_ns": 9055851,
+          "percent_kernel_time": 0.41523121226226517,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void rope_multi<true, false, float>(float const*, float*, int, int, int, int, int, int, int, int, int, int, int, int const*, float, float, float, rope_corr_dims, float, float const*, mrope_sections, bool, bool)",
+          "calls": 2048,
+          "total_ns": 8950494,
+          "percent_kernel_time": 0.41040035596501434,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void ssm_conv_f32<true, 128ul, 4ul>(float const*, float const*, float const*, int, int, int, int, float*, int, int, int, long)",
+          "calls": 3072,
+          "total_ns": 8419737,
+          "percent_kernel_time": 0.3860639493118259,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void concat_cont<unsigned int, 0>(unsigned int const*, unsigned int const*, unsigned int*, long, long, long, long, long, long)",
+          "calls": 3072,
+          "total_ns": 8265738,
+          "percent_kernel_time": 0.3790027475034949,
+          "vgpr_count": 24
+        },
+        {
+          "name": "_ZL16k_set_rows_quantIl10block_q8_0Li32ETnPFvPKfPT0_EXadL_ZL23quantize_f32_q8_0_blockS2_PS0_EEEvS2_PKT_S4_llllllllllllll15HIP_vector_typeIjLj3EESC_SC_SC_SC_",
+          "calls": 2048,
+          "total_ns": 7322969,
+          "percent_kernel_time": 0.3357746605182647,
+          "vgpr_count": 80
+        },
+        {
+          "name": "void l2_norm_f32<32>(float const*, float*, int, long, long, long, float)",
+          "calls": 3072,
+          "total_ns": 7248650,
+          "percent_kernel_time": 0.3323669665904252,
+          "vgpr_count": 8
+        },
+        {
+          "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 3136,
+          "total_ns": 6754256,
+          "percent_kernel_time": 0.30969788557802885,
+          "vgpr_count": 24
+        },
+        {
+          "name": "void fwht_cuda<256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 2048,
+          "total_ns": 4500650,
+          "percent_kernel_time": 0.20636496288070152,
+          "vgpr_count": 32
+        },
+        {
+          "name": "void fwht_cuda<64, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 2048,
+          "total_ns": 3781405,
+          "percent_kernel_time": 0.17338595590901296,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void flash_attn_combine_results<256>(float const*, HIP_vector_type<float, 2u> const*, float*, int)",
+          "calls": 1024,
+          "total_ns": 3558169,
+          "percent_kernel_time": 0.16315008134564182,
+          "vgpr_count": 56
+        },
+        {
+          "name": "void unary_gated_op_kernel<&(op_sigmoid(float)), float>(float const*, float const*, float*, long, long, long, long)",
+          "calls": 1024,
+          "total_ns": 2352885,
+          "percent_kernel_time": 0.10788508897327262,
+          "vgpr_count": 16
+        },
+        {
+          "name": "__amd_rocclr_copyBuffer",
+          "calls": 448,
+          "total_ns": 1390482,
+          "percent_kernel_time": 0.06375673876357496,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void fwht_cuda_block<1024, 256, float, false>(float const*, float*, long, float, float const*, int)",
+          "calls": 64,
+          "total_ns": 188681,
+          "percent_kernel_time": 0.008651449804204648,
+          "vgpr_count": 16
+        },
+        {
+          "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+          "calls": 64,
+          "total_ns": 188401,
+          "percent_kernel_time": 0.008638611172094487,
+          "vgpr_count": 24
+        }
+      ],
+      "hip_api_ns": {
+        "hipGraphLaunch": 6590675579,
+        "hipLaunchKernel": 76403042,
+        "hipStreamSynchronize": 15391855,
+        "hipGraphExecUpdate": 9079775,
+        "hipMemcpyAsync": 4943617,
+        "hipGraphDestroy": 2794906,
+        "hipGetLastError": 518296,
+        "hipGetDevice": 475750,
+        "hipOccupancyMaxActiveBlocksPerMultiprocessor": 30445,
+        "hipStreamEndCapture": 19778,
+        "hipStreamBeginCapture": 4077,
+        "hipDeviceGetAttribute": 3697
+      },
+      "coding_task": {
+        "passed": true,
+        "wall_seconds": 34.00739332099329,
+        "turn_timings": [
+          {
+            "cache_n": 0,
+            "prompt_n": 468,
+            "prompt_ms": 2317.666,
+            "prompt_per_token_ms": 4.952277777777778,
+            "prompt_per_second": 201.9272837414882,
+            "predicted_n": 26,
+            "predicted_ms": 2824.732,
+            "predicted_per_token_ms": 112.98928,
+            "predicted_per_second": 8.850397135020243
+          },
+          {
+            "cache_n": 493,
+            "prompt_n": 3524,
+            "prompt_ms": 13178.52,
+            "prompt_per_token_ms": 3.7396481271282633,
+            "prompt_per_second": 267.4048375690138,
+            "predicted_n": 74,
+            "predicted_ms": 9229.188,
+            "predicted_per_token_ms": 126.42723287671232,
+            "predicted_per_second": 7.909688262932774
+          },
+          {
+            "cache_n": 4090,
+            "prompt_n": 21,
+            "prompt_ms": 338.216,
+            "prompt_per_token_ms": 16.10552380952381,
+            "prompt_per_second": 62.09049837973366,
+            "predicted_n": 15,
+            "predicted_ms": 1509.041,
+            "predicted_per_token_ms": 107.78864285714285,
+            "predicted_per_second": 9.277415259095015
+          },
+          {
+            "cache_n": 4125,
+            "prompt_n": 22,
+            "prompt_ms": 345.522,
+            "prompt_per_token_ms": 15.705545454545454,
+            "prompt_per_second": 63.67177777391889,
+            "predicted_n": 39,
+            "predicted_ms": 4206.032,
+            "predicted_per_token_ms": 110.68505263157896,
+            "predicted_per_second": 9.03464357855575
+          }
+        ]
+      }
+    }
+  },
+  "unprofiled_controls": {
+    "9b-prefill-baseline": {
+      "build_commit": "b87ca7225",
+      "build_number": 10794,
+      "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+      "gpu_info": "AMD Radeon RX 6700",
+      "backends": "ROCm",
+      "model_filename": "Ternary-Bonsai-2-9B-PQ2_0.gguf",
+      "model_type": "qwen35 9B PQ2_0 - 2.13 bpw (group 128)",
+      "model_size": 2405812224,
+      "model_n_params": 8953803264,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "n_threads": 6,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "f16",
+      "type_v": "f16",
+      "n_gpu_layers": 99,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 2048,
+      "n_gen": 0,
+      "n_depth": 0,
+      "test_time": "2026-10-24T04:56:25Z",
+      "avg_ns": 2137524801,
+      "stddev_ns": 743281,
+      "avg_ts": 958.117615,
+      "stddev_ts": 0.333185,
+      "samples_ns": [
+        2138223586,
+        2137606966,
+        2136743851
+      ],
+      "samples_ts": [
+        957.804,
+        958.081,
+        958.468
+      ]
+    },
+    "9b-decode-baseline": {
+      "build_commit": "b87ca7225",
+      "build_number": 10794,
+      "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+      "gpu_info": "AMD Radeon RX 6700",
+      "backends": "ROCm",
+      "model_filename": "Ternary-Bonsai-2-9B-PQ2_0.gguf",
+      "model_type": "qwen35 9B PQ2_0 - 2.13 bpw (group 128)",
+      "model_size": 2405812224,
+      "model_n_params": 8953803264,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "n_threads": 6,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "f16",
+      "type_v": "f16",
+      "n_gpu_layers": 99,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 0,
+      "n_gen": 64,
+      "n_depth": 2048,
+      "test_time": "2026-10-24T04:56:35Z",
+      "avg_ns": 787003359,
+      "stddev_ns": 15839660,
+      "avg_ts": 81.342844,
+      "stddev_ts": 1.618532,
+      "samples_ns": [
+        805273650,
+        777131870,
+        778604557
+      ],
+      "samples_ts": [
+        79.4761,
+        82.3541,
+        82.1983
+      ]
+    },
+    "27b-prefill-baseline": {
+      "build_commit": "b87ca7225",
+      "build_number": 10794,
+      "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+      "gpu_info": "AMD Radeon RX 6700",
+      "backends": "ROCm",
+      "model_filename": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+      "model_type": "qwen35 27B PQ2_0 - 2.13 bpw (group 128)",
+      "model_size": 7195047936,
+      "model_n_params": 26895998464,
+      "n_batch": 1024,
+      "n_ubatch": 256,
+      "n_threads": 6,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "q8_0",
+      "type_v": "q8_0",
+      "n_gpu_layers": 99,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 2048,
+      "n_gen": 0,
+      "n_depth": 0,
+      "test_time": "2026-10-24T04:56:42Z",
+      "avg_ns": 7682970155,
+      "stddev_ns": 590268893,
+      "avg_ts": 267.571795,
+      "stddev_ts": 19.684573,
+      "samples_ns": [
+        7349325336,
+        8364504331,
+        7335080800
+      ],
+      "samples_ts": [
+        278.665,
+        244.844,
+        279.206
+      ]
+    },
+    "27b-decode-baseline": {
+      "build_commit": "b87ca7225",
+      "build_number": 10794,
+      "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+      "gpu_info": "AMD Radeon RX 6700",
+      "backends": "ROCm",
+      "model_filename": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+      "model_type": "qwen35 27B PQ2_0 - 2.13 bpw (group 128)",
+      "model_size": 7195047936,
+      "model_n_params": 26895998464,
+      "n_batch": 1024,
+      "n_ubatch": 256,
+      "n_threads": 6,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "q8_0",
+      "type_v": "q8_0",
+      "n_gpu_layers": 99,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 0,
+      "n_gen": 64,
+      "n_depth": 2048,
+      "test_time": "2026-10-24T04:57:14Z",
+      "avg_ns": 2659242102,
+      "stddev_ns": 618159318,
+      "avg_ts": 24.856487,
+      "stddev_ts": 5.094357,
+      "samples_ns": [
+        3373030740,
+        2301824756,
+        2302870812
+      ],
+      "samples_ts": [
+        18.974,
+        27.804,
+        27.7914
+      ]
+    },
+    "9b-long-f16-baseline": {
+      "build_commit": "b87ca7225",
+      "build_number": 10794,
+      "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+      "gpu_info": "AMD Radeon RX 6700",
+      "backends": "ROCm",
+      "model_filename": "Ternary-Bonsai-2-9B-PQ2_0.gguf",
+      "model_type": "qwen35 9B PQ2_0 - 2.13 bpw (group 128)",
+      "model_size": 2405812224,
+      "model_n_params": 8953803264,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "n_threads": 6,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "f16",
+      "type_v": "f16",
+      "n_gpu_layers": 99,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 0,
+      "n_gen": 128,
+      "n_depth": 32768,
+      "test_time": "2026-10-24T05:08:22Z",
+      "avg_ns": 1998853523,
+      "stddev_ns": 8902910,
+      "avg_ts": 64.037553,
+      "stddev_ts": 0.284494,
+      "samples_ns": [
+        2009125567,
+        1993365846,
+        1994069157
+      ],
+      "samples_ts": [
+        63.7093,
+        64.213,
+        64.1904
+      ]
+    },
+    "9b-long-q8_0-baseline": {
+      "build_commit": "b87ca7225",
+      "build_number": 10794,
+      "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+      "gpu_info": "AMD Radeon RX 6700",
+      "backends": "ROCm",
+      "model_filename": "Ternary-Bonsai-2-9B-PQ2_0.gguf",
+      "model_type": "qwen35 9B PQ2_0 - 2.13 bpw (group 128)",
+      "model_size": 2405812224,
+      "model_n_params": 8953803264,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "n_threads": 6,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "q8_0",
+      "type_v": "q8_0",
+      "n_gpu_layers": 99,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 0,
+      "n_gen": 128,
+      "n_depth": 32768,
+      "test_time": "2026-10-24T05:09:14Z",
+      "avg_ns": 2860025824,
+      "stddev_ns": 10844203,
+      "avg_ts": 44.755269,
+      "stddev_ts": 0.169405,
+      "samples_ns": [
+        2872242058,
+        2856298770,
+        2851536644
+      ],
+      "samples_ts": [
+        44.5645,
+        44.8132,
+        44.8881
+      ]
+    },
+    "27b-long-q8_0-baseline": {
+      "build_commit": "b87ca7225",
+      "build_number": 10794,
+      "cpu_info": "AMD Ryzen 5 5600X 6-Core Processor",
+      "gpu_info": "AMD Radeon RX 6700",
+      "backends": "ROCm",
+      "model_filename": "Ternary-Bonsai-2-27B-PQ2_0.gguf",
+      "model_type": "qwen35 27B PQ2_0 - 2.13 bpw (group 128)",
+      "model_size": 7195047936,
+      "model_n_params": 26895998464,
+      "n_batch": 1024,
+      "n_ubatch": 256,
+      "n_threads": 6,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "q8_0",
+      "type_v": "q8_0",
+      "n_gpu_layers": 99,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 1,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "fit_target": 0,
+      "fit_min_ctx": 0,
+      "n_prompt": 0,
+      "n_gen": 128,
+      "n_depth": 8192,
+      "test_time": "2026-10-24T05:10:09Z",
+      "avg_ns": 5571190998,
+      "stddev_ns": 633211540,
+      "avg_ts": 23.162534,
+      "stddev_ts": 2.470502,
+      "samples_ns": [
+        6302358107,
+        5207292128,
+        5203922761
+      ],
+      "samples_ts": [
+        20.3099,
+        24.5809,
+        24.5968
+      ]
+    }
+  },
+  "counter_samples": {
+    "9b-prefill-counters": [
+      {
+        "kernel": "void mul_mat_q<(ggml_type)142, 64, false>(char const*, int const*, int const*, int const*, float*, float*, float const*, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>)",
+        "grid_size": 65536,
+        "workgroup_size": 256,
+        "vgpr_count": 248,
+        "counters": {
+          "L2CacheHit": 69.278408,
+          "OccupancyPercent": 23.383554,
+          "MemUnitBusy": 38.109535
+        }
+      },
+      {
+        "kernel": "void mul_mat_q<(ggml_type)142, 64, false>(char const*, int const*, int const*, int const*, float*, float*, float const*, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>)",
+        "grid_size": 65536,
+        "workgroup_size": 256,
+        "vgpr_count": 248,
+        "counters": {
+          "L2CacheHit": 70.804522,
+          "OccupancyPercent": 23.218626,
+          "MemUnitBusy": 41.299582
+        }
+      },
+      {
+        "kernel": "void mul_mat_q<(ggml_type)142, 64, false>(char const*, int const*, int const*, int const*, float*, float*, float const*, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>)",
+        "grid_size": 196608,
+        "workgroup_size": 256,
+        "vgpr_count": 248,
+        "counters": {
+          "L2CacheHit": 70.780457,
+          "OccupancyPercent": 24.55093,
+          "MemUnitBusy": 41.919758
+        }
+      },
+      {
+        "kernel": "void mul_mat_q<(ggml_type)142, 64, false>(char const*, int const*, int const*, int const*, float*, float*, float const*, HIP_vector_type<unsigned int, 3u>, int, int, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>, HIP_vector_type<unsigned int, 3u>, int, int, int, HIP_vector_type<unsigned int, 3u>)",
+        "grid_size": 196608,
+        "workgroup_size": 256,
+        "vgpr_count": 248,
+        "counters": {
+          "L2CacheHit": 67.487343,
+          "OccupancyPercent": 24.610176,
+          "MemUnitBusy": 41.073009
+        }
+      }
+    ],
+    "27b-decode-counters": [
+      {
+        "kernel": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+        "grid_size": 196608,
+        "workgroup_size": 32,
+        "vgpr_count": 40,
+        "counters": {
+          "L2CacheHit": 17.131655,
+          "OccupancyPercent": 69.42937,
+          "MemUnitBusy": 69.63432
+        }
+      },
+      {
+        "kernel": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+        "grid_size": 163840,
+        "workgroup_size": 32,
+        "vgpr_count": 40,
+        "counters": {
+          "L2CacheHit": 14.853956,
+          "OccupancyPercent": 68.278473,
+          "MemUnitBusy": 66.999123
+        }
+      },
+      {
+        "kernel": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+        "grid_size": 557056,
+        "workgroup_size": 32,
+        "vgpr_count": 40,
+        "counters": {
+          "L2CacheHit": 17.669218,
+          "OccupancyPercent": 85.849015,
+          "MemUnitBusy": 86.284339
+        }
+      },
+      {
+        "kernel": "void mul_mat_vec_q<(ggml_type)142, 1, false, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+        "grid_size": 557056,
+        "workgroup_size": 32,
+        "vgpr_count": 40,
+        "counters": {
+          "L2CacheHit": 17.774991,
+          "OccupancyPercent": 86.019315,
+          "MemUnitBusy": 86.818827
+        }
+      },
+      {
+        "kernel": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+        "grid_size": 163840,
+        "workgroup_size": 32,
+        "vgpr_count": 40,
+        "counters": {
+          "L2CacheHit": 11.604507,
+          "OccupancyPercent": 84.672914,
+          "MemUnitBusy": 89.032536
+        }
+      },
+      {
+        "kernel": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+        "grid_size": 163840,
+        "workgroup_size": 32,
+        "vgpr_count": 40,
+        "counters": {
+          "L2CacheHit": 11.587975,
+          "OccupancyPercent": 88.354347,
+          "MemUnitBusy": 89.282526
+        }
+      },
+      {
+        "kernel": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+        "grid_size": 163840,
+        "workgroup_size": 32,
+        "vgpr_count": 40,
+        "counters": {
+          "L2CacheHit": 11.392659,
+          "OccupancyPercent": 88.672104,
+          "MemUnitBusy": 90.507926
+        }
+      },
+      {
+        "kernel": "void mul_mat_vec_q<(ggml_type)142, 1, true, false, false, false, false>(void const*, void const*, int const*, ggml_cuda_mm_fusion_args_device, float*, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, HIP_vector_type<unsigned int, 3u>, unsigned int, unsigned int, unsigned int, unsigned int)",
+        "grid_size": 163840,
+        "workgroup_size": 32,
+        "vgpr_count": 40,
+        "counters": {
+          "L2CacheHit": 11.117398,
+          "OccupancyPercent": 86.666705,
+          "MemUnitBusy": 87.324649
+        }
+      }
+    ]
+  },
+  "unprofiled_tile_experiments": {
+    "9b-tile64": {
+      "n_prompt": 2048,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "avg_ts": 960.354744,
+      "stddev_ts": 0.30064,
+      "samples_ts": [
+        960.152,
+        960.7,
+        960.213
+      ]
+    },
+    "9b-tile48": {
+      "n_prompt": 2048,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "avg_ts": 905.141542,
+      "stddev_ts": 0.20956,
+      "samples_ts": [
+        904.927,
+        905.151,
+        905.346
+      ]
+    },
+    "9b-tile32": {
+      "n_prompt": 2048,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "avg_ts": 820.427568,
+      "stddev_ts": 0.256381,
+      "samples_ts": [
+        820.229,
+        820.717,
+        820.337
+      ]
+    },
+    "9b-tile16": {
+      "n_prompt": 2048,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "avg_ts": 601.228513,
+      "stddev_ts": 0.150966,
+      "samples_ts": [
+        601.141,
+        601.142,
+        601.403
+      ]
+    },
+    "9b-tile-i64-j64": {
+      "n_prompt": 2048,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "avg_ts": 782.262399,
+      "stddev_ts": 0.115145,
+      "samples_ts": [
+        782.378,
+        782.261,
+        782.148
+      ]
+    }
+  },
+  "tile_trace_verification": {
+    "row_tile": 128,
+    "column_tile": 32,
+    "kernel": "mul_mat_q<(ggml_type)142, 32, false>",
+    "vgpr_count": 184,
+    "method": "Kernel-only trace of the documented standalone experiment, prefill 512 tokens with microbatch 512. This verifies the selected instantiation and register metadata, not steady-state performance."
+  }
+}

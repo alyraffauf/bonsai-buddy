@@ -4,10 +4,10 @@ let
     modelFile = "Ternary-Bonsai-2-9B-PQ2_0.gguf";
     modelSha256 = "7a89ab48f5038c704480f60781f9b8d4035351f5f6beb7d11fad80001fde23f9";
     backend = "rocm";
-    contextTokens = "65536";
+    contextTokens = "131072";
     kvType = "f16";
     batchSize = "2048";
-    ubatchSize = "512";
+    ubatchSize = "256";
     maxTokens = "8192";
     thinkingTokens = "1024";
     gpuReserveMb = "512";
@@ -66,6 +66,7 @@ in
   "9b-vulkan" = nine // {
     backend = "vulkan";
     contextTokens = "32768";
+    ubatchSize = "512";
   };
   "27b" = twentySeven;
   "27b-vulkan" = twentySeven // {
