@@ -1,37 +1,69 @@
 # Run Bonsai 2 locally
 
-Choose a model from any directory:
+Run either model in your terminal:
 
 ```sh
-nix run /home/aly/src/bonsaid#9b
-nix run /home/aly/src/bonsaid#27b
+nix run ~/src/bonsaid#9b
+nix run ~/src/bonsaid#27b
 ```
 
-Open http://localhost:8080. Press Ctrl+C in the terminal to stop the server.
+Open http://localhost:8080. Press Ctrl+C to stop the server.
+Plain `nix run ~/src/bonsaid` selects 9B.
 
-Running `nix run /home/aly/src/bonsaid` selects 9B by default.
-The flake uses Prism's Vulkan runtime on x86_64 Linux, with PQ2_0 for 9B and PTQ1_0 for 27B.
-It starts a foreground process without installing a service or changing Ollama.
+These profiles target the Radeon RX 6700 with 10 GB VRAM on x86_64 Linux.
+They use ROCm with `HSA_OVERRIDE_GFX_VERSION=10.3.0`, matching Hoenn's Petalburg configuration.
+The runtime includes pinned upstream fixes for agent tool grammars and malformed input.
+The first build compiles the server and web UI. Nix caches later runs.
+
+| App | Context | Packing and decoding | Use |
+| --- | ---: | --- | --- |
+| `#9b` | 64K | PQ2_0 with MTP depth 1, F16 KV | Default for coding agents |
+| `#27b` | 32K | PTQ1_0, Q8 KV | Larger model with room for agent history |
+| `#9b-plain` | 64K | PQ2_0, F16 KV | 9B without speculative decoding |
+| `#9b-rewrite` | 8K | PQ2_0 with DFlash2, F16 KV | Cached, repetitive code rewrites |
+| `#27b-prefill` | 8K | PQ2_0, Q8 KV | Faster cold prompts with a shorter context |
+
+`#9b-vulkan` and `#27b-vulkan` provide the release's Vulkan backend as alternatives.
+They use 32K and 8K contexts respectively.
+
+All apps run in the foreground. They cache model files in
+`${XDG_CACHE_HOME:-$HOME/.cache}/bonsaid/models` and verify new downloads with SHA-256.
+Run one model at a time for the measured performance on this GPU.
+
 The OpenAI-compatible API is at http://localhost:8080/v1.
-Use model name `bonsai2:9b` or `bonsai2:27b`, matching the selected app.
+Use model name `bonsai2:9b` or `bonsai2:27b`, matching the selected size.
+Enable history compaction in your agent and configure its context limit to match the profile.
 
-The first run downloads and verifies the selected model into
-`${XDG_CACHE_HOME:-$HOME/.cache}/bonsaid/models`. The 9B files total about 3.0 GB,
-and the 27B files total about 6.6 GB. Later runs reuse those files.
-Set `BONSAI_MODELS_DIR` to use another model directory.
+Thinking defaults to 1024 tokens. Main profiles allow up to 8192 total output tokens;
+the short 8K profiles allow 4096. Clients can override these defaults per request.
+At the thinking limit, a short transition message prompts the answer or next tool call.
+If thinking is enabled, leave room for both reasoning and the final answer in the client's output limit.
+The 27B profile maps unsupported reasoning-effort values such as `high` to `medium`.
+If your agent supports it, preserve `reasoning_content` on previous assistant messages
+when sending tool results. This keeps more of the conversation prefix reusable.
 
-To change the port or context size, set `BONSAI_PORT` or `BONSAI_CTX`.
-The defaults are port 8080 and 8192 context tokens. To use a different port, run:
+To change defaults, set these environment variables:
+
+| Variable | Default |
+| --- | --- |
+| `BONSAI_PORT` | `8080` |
+| `BONSAI_CTX` | Profile context |
+| `BONSAI_KV_TYPE` | Profile KV type |
+| `BONSAI_THINK_TOKENS` | `1024` |
+| `BONSAI_MAX_TOKENS` | Profile output limit |
+| `BONSAI_CACHE_MB` | `1024` MiB of host prompt-cache storage |
+| `BONSAI_GPU_RESERVE_MB` | `512` MiB for 9B, `256` MiB for 27B, beyond desktop VRAM |
+| `BONSAI_MODELS_DIR` | Model-cache path above |
+
+For example:
 
 ```sh
-BONSAI_PORT=8081 nix run /home/aly/src/bonsaid#27b
+BONSAI_PORT=8081 nix run ~/src/bonsaid#9b
+BONSAI_THINK_TOKENS=4096 nix run ~/src/bonsaid#9b
 ```
 
-Arguments after `--` pass to llama-server.
+Arguments after `--` pass to llama-server. The vision projector runs on the CPU to reserve VRAM for agent context.
+Large images are downscaled to 1024 vision tokens; pass `--image-max-tokens 4096` for more detail.
 
-The vision projector runs on the CPU to save VRAM. Large images are downscaled
-to 1024 vision tokens. Pass `--image-max-tokens 4096` for more image detail.
-
-Runtime source: [Prism's pinned release](https://github.com/PrismML-Eng/llama.cpp/releases/tag/prism-b10787-73bfe6c).
-Model sources: [Bonsai 2 9B GGUF](https://huggingface.co/prism-ml/Ternary-Bonsai-2-9B-gguf),
-[Bonsai 2 27B GGUF](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf).
+Read [the measurements and tuning decisions](PERFORMANCE.md) for benchmark results,
+tradeoffs, and commands to repeat the tests.

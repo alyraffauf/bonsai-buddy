@@ -1,61 +1,146 @@
 {
-  description = "Run Bonsai 2 9B or 27B in the foreground with Prism's Vulkan runtime";
+  description = "Foreground Bonsai 2 profiles for coding agents on the Radeon RX 6700";
 
   inputs.nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
 
-  outputs = { nixpkgs, ... }: let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+  outputs =
+    { nixpkgs, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
 
-    runtime = pkgs.stdenv.mkDerivation {
-      pname = "prism-llama-vulkan";
-      version = "b10787-73bfe6c";
-      src = pkgs.fetchurl {
-        url = "https://github.com/PrismML-Eng/llama.cpp/releases/download/prism-b10787-73bfe6c/llama-prism-b10787-73bfe6c-bin-ubuntu-vulkan-x64.tar.gz";
-        hash = "sha256-RAHGZVBpJ/XCrUTE4uE5cV3lvV6StpOgofUVuUQq+bs=";
-      };
-      nativeBuildInputs = [ pkgs.autoPatchelfHook pkgs.makeWrapper ];
-      buildInputs = [ pkgs.stdenv.cc.cc.lib pkgs.vulkan-loader pkgs.openssl pkgs.curl ];
-      dontBuild = true;
-      dontStrip = true;
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/lib/bonsai2 $out/bin
-        cp -a . $out/lib/bonsai2/
-        makeWrapper $out/lib/bonsai2/llama-server $out/bin/llama-server \
-          --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath [ pkgs.vulkan-loader ]} \
-          --prefix XDG_DATA_DIRS : /run/opengl-driver/share
-        runHook postInstall
+      mkRuntime =
+        backend:
+        let
+          isRocm = backend == "rocm";
+          archiveBackend = if isRocm then "rocm-7.2" else "vulkan";
+        in
+        pkgs.stdenv.mkDerivation {
+          pname = "prism-llama-${backend}";
+          version = "b10787-73bfe6c";
+          src = pkgs.fetchurl {
+            url = "https://github.com/PrismML-Eng/llama.cpp/releases/download/prism-b10787-73bfe6c/llama-prism-b10787-73bfe6c-bin-ubuntu-${archiveBackend}-x64.tar.gz";
+            hash =
+              if isRocm then
+                "sha256-aDktKYBGnyZ7o3f83wzoNuaHgNSpcgbKh98UQq+zJJc="
+              else
+                "sha256-RAHGZVBpJ/XCrUTE4uE5cV3lvV6StpOgofUVuUQq+bs=";
+          };
+          nativeBuildInputs = [
+            pkgs.autoPatchelfHook
+            pkgs.makeWrapper
+          ];
+          buildInputs = [
+            pkgs.stdenv.cc.cc.lib
+            pkgs.openssl
+            pkgs.curl
+          ]
+          ++ pkgs.lib.optionals isRocm [
+            pkgs.rocmPackages.clr
+            pkgs.rocmPackages.hipblas
+            pkgs.rocmPackages.rocblas
+            pkgs.rocmPackages.hipblaslt
+          ]
+          ++ pkgs.lib.optional (!isRocm) pkgs.vulkan-loader;
+          dontBuild = true;
+          dontStrip = true;
+          installPhase = ''
+            runHook preInstall
+            mkdir -p $out/lib/bonsai2 $out/bin
+            cp -a . $out/lib/bonsai2/
+            wrapper_arguments=(
+              ${
+                if isRocm then
+                  ''
+                    --set-default HSA_OVERRIDE_GFX_VERSION 10.3.0
+                    --set-default ROCBLAS_TENSILE_LIBPATH ${pkgs.rocmPackages.rocblas}/lib/rocblas/library
+                  ''
+                else
+                  ''
+                    --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath [ pkgs.vulkan-loader ]}
+                    --prefix XDG_DATA_DIRS : /run/opengl-driver/share
+                  ''
+              }
+            )
+            for program in llama-server llama-bench; do
+              makeWrapper $out/lib/bonsai2/$program $out/bin/$program \
+                "''${wrapper_arguments[@]}"
+            done
+            runHook postInstall
+          '';
+        };
+
+      runtime = mkRuntime "vulkan";
+      rocmRuntime = mkRuntime "rocm";
+      sourceRuntime = import ./runtime-source.nix { inherit pkgs rocmRuntime; };
+      vramHelper = pkgs.runCommand "bonsaid-vram" { nativeBuildInputs = [ pkgs.stdenv.cc ]; } ''
+        mkdir -p $out/bin
+        c++ -O2 -std=c++17 ${./vram.cpp} -ldl -o $out/bin/bonsaid-vram
       '';
-    };
 
-    mkBonsaid = modelSize: pkgs.writeShellApplication {
-      name = "bonsaid-${modelSize}";
-      runtimeInputs = [ pkgs.curl pkgs.coreutils ];
-      text = builtins.readFile (pkgs.replaceVars ./bonsaid.sh {
-        llamaServer = "${runtime}/bin/llama-server";
-        inherit modelSize;
-      });
-    };
+      profiles = import ./profiles.nix;
+      mkBonsaid =
+        name: profile:
+        let
+          substitutions = (builtins.removeAttrs profile [ "extraArgs" ]) // {
+            llamaServer = "${if profile.backend == "vulkan" then runtime else sourceRuntime}/bin/llama-server";
+            vramHelper = "${vramHelper}/bin/bonsaid-vram";
+            hipLibrary = "${pkgs.rocmPackages.clr}/lib/libamdhip64.so.7";
+            extraArgs = pkgs.lib.escapeShellArgs profile.extraArgs;
+          };
+        in
+        pkgs.writeShellApplication {
+          name = "bonsaid-${name}";
+          runtimeInputs = [
+            pkgs.curl
+            pkgs.coreutils
+          ];
+          text = builtins.replaceStrings (map (key: "@${key}@") (
+            builtins.attrNames substitutions
+          )) (builtins.attrValues substitutions) (builtins.readFile ./bonsaid.sh);
+        };
 
-    bonsaid9b = mkBonsaid "9b";
-    bonsaid27b = mkBonsaid "27b";
-    mkApp = package: {
-      type = "app";
-      program = pkgs.lib.getExe package;
+      modelPackages = builtins.mapAttrs mkBonsaid profiles;
+      mkApp = package: {
+        type = "app";
+        program = pkgs.lib.getExe package;
+      };
+    in
+    {
+      packages.${system} = modelPackages // {
+        default = modelPackages."9b";
+        bonsaid = modelPackages."9b";
+        inherit runtime;
+        runtime-rocm = rocmRuntime;
+        runtime-source = sourceRuntime;
+      };
+      apps.${system} = builtins.mapAttrs (_: mkApp) modelPackages // {
+        default = mkApp modelPackages."9b";
+        bench = {
+          type = "app";
+          program = "${sourceRuntime}/bin/llama-bench";
+        };
+        bench-rocm = {
+          type = "app";
+          program = "${sourceRuntime}/bin/llama-bench";
+        };
+        bench-rocm-release = {
+          type = "app";
+          program = "${rocmRuntime}/bin/llama-bench";
+        };
+        bench-vulkan = {
+          type = "app";
+          program = "${runtime}/bin/llama-bench";
+        };
+      };
+      devShells.${system}.default = pkgs.mkShell {
+        packages = [
+          pkgs.python3
+          pkgs.stdenv.cc
+        ];
+        BONSAID_INCLUDE = "${sourceRuntime.dev}/include";
+        BONSAID_RELEASE_LIB = "${rocmRuntime}/lib/bonsai2";
+        BONSAID_SOURCE_LIB = "${sourceRuntime}/lib";
+      };
     };
-  in {
-    packages.${system} = {
-      default = bonsaid9b;
-      bonsaid = bonsaid9b;
-      "9b" = bonsaid9b;
-      "27b" = bonsaid27b;
-      inherit runtime;
-    };
-    apps.${system} = {
-      default = mkApp bonsaid9b;
-      "9b" = mkApp bonsaid9b;
-      "27b" = mkApp bonsaid27b;
-    };
-  };
 }
