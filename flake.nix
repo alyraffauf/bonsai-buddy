@@ -1,7 +1,7 @@
 {
   description = "Bonsai Buddy profiles for coding agents on the Radeon RX 6700";
 
-  inputs.nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   outputs =
     { nixpkgs, ... }:
@@ -128,20 +128,22 @@
             builtins.toJSON {
               "$schema" = "https://opencode.ai/config.json";
               model = "bonsai-buddy/bonsai2:${size}";
-              small_model = "bonsai-buddy/bonsai2:${size}";
-              compaction = {
-                auto = true;
-                prune = true;
-              };
-              provider.bonsai-buddy = {
-                npm = "@ai-sdk/openai-compatible";
+              agents.title.model = "bonsai-buddy/bonsai2:${size}";
+              compaction.auto = true;
+              providers.bonsai-buddy = {
+                package = "@opencode/ai/providers/openai-compatible";
                 name = "Bonsai Buddy";
-                options.baseURL = "http://127.0.0.1:8080/v1";
+                settings.baseURL = "http://127.0.0.1:8080/v1";
                 models."bonsai2:${size}" = {
                   name = "Bonsai 2 ${size}";
-                  reasoning = true;
-                  interleaved.field = "reasoning_content";
-                  options.reasoningEffort = "medium";
+                  capabilities = {
+                    tools = true;
+                    input = [ "text" ];
+                    output = [ "text" ];
+                    reasoning.supported = true;
+                  };
+                  compatibility.reasoningField = "reasoning_content";
+                  settings.reasoningEffort = "medium";
                 };
               };
             }

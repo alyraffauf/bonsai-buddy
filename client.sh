@@ -70,10 +70,11 @@ jq --arg url "$base_url/v1" --arg model "bonsai2:@modelSize@" \
   --argjson context "$context_tokens" --argjson input "$input_tokens" \
   --argjson output "$output_tokens" --argjson thinking "$thinking_tokens" \
   --argjson reserve "$reserved_tokens" '
-    .provider["bonsai-buddy"].options.baseURL = $url |
-    .provider["bonsai-buddy"].models[$model].limit = {context: $context, input: $input, output: $output} |
-    .provider["bonsai-buddy"].models[$model].options.reasoning_budget_tokens = $thinking |
-    .compaction.reserved = $reserve
+    .providers["bonsai-buddy"].settings.baseURL = $url |
+    .providers["bonsai-buddy"].models[$model].limit = {context: $context, input: $input, output: $output} |
+    .providers["bonsai-buddy"].models[$model].body.reasoning_budget_tokens = $thinking |
+    .compaction.buffer = $reserve |
+    .compaction.keep.tokens = $reserve
   ' @opencodeConfig@ > "$temporary_directory/opencode.json"
 export OPENCODE_CONFIG="$temporary_directory/opencode.json"
-@clientProgram@ "$@"
+@clientProgram@ "$@" --standalone

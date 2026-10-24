@@ -41,10 +41,10 @@ class ClientLauncherTests(unittest.TestCase):
         config.write_text(
             json.dumps(
                 {
-                    "provider": {
+                    "providers": {
                         "bonsai-buddy": {
-                            "options": {},
-                            "models": {f"bonsai2:{size}": {"options": {}}},
+                            "settings": {},
+                            "models": {f"bonsai2:{size}": {"body": {}}},
                         }
                     },
                     "compaction": {},
@@ -113,13 +113,14 @@ class ClientLauncherTests(unittest.TestCase):
         result = self.launch(arguments=("run", "Hello"))
         self.assertEqual(result.returncode, 0, result.stderr)
         record = json.loads(Path(self.environment["CLIENT_CAPTURE"]).read_text())
-        model = record["config"]["provider"]["bonsai-buddy"]["models"]["bonsai2:27b"]
+        model = record["config"]["providers"]["bonsai-buddy"]["models"]["bonsai2:27b"]
         self.assertEqual(
             model["limit"], {"context": 16384, "input": 12288, "output": 4096}
         )
-        self.assertEqual(model["options"]["reasoning_budget_tokens"], 2048)
-        self.assertEqual(record["config"]["compaction"]["reserved"], 4096)
-        self.assertEqual(record["arguments"], ["run", "Hello"])
+        self.assertEqual(model["body"]["reasoning_budget_tokens"], 2048)
+        self.assertEqual(record["config"]["compaction"]["buffer"], 4096)
+        self.assertEqual(record["config"]["compaction"]["keep"]["tokens"], 4096)
+        self.assertEqual(record["arguments"], ["run", "Hello", "--standalone"])
         self.assert_owned_server_stopped()
 
     def test_9b_context_and_compaction(self):
@@ -135,10 +136,10 @@ class ClientLauncherTests(unittest.TestCase):
         config = json.loads(Path(self.environment["CLIENT_CAPTURE"]).read_text())[
             "config"
         ]
-        limits = config["provider"]["bonsai-buddy"]["models"]["bonsai2:9b"]["limit"]
+        limits = config["providers"]["bonsai-buddy"]["models"]["bonsai2:9b"]["limit"]
         self.assertEqual(limits, {"context": 65536, "input": 57344, "output": 8192})
-        self.assertEqual(config["compaction"]["reserved"], 8192)
-        self.assertEqual(limits["input"] - config["compaction"]["reserved"], 49152)
+        self.assertEqual(config["compaction"]["buffer"], 8192)
+        self.assertEqual(limits["input"] - config["compaction"]["buffer"], 49152)
         self.assert_owned_server_stopped()
 
     def test_long_context_limits_follow_each_model_capacity(self):
@@ -160,7 +161,7 @@ class ClientLauncherTests(unittest.TestCase):
                 config = json.loads(
                     Path(self.environment["CLIENT_CAPTURE"]).read_text()
                 )["config"]
-                model = config["provider"]["bonsai-buddy"]["models"][f"bonsai2:{size}"]
+                model = config["providers"]["bonsai-buddy"]["models"][f"bonsai2:{size}"]
                 self.assertEqual(
                     model["limit"],
                     {
@@ -169,9 +170,9 @@ class ClientLauncherTests(unittest.TestCase):
                         "output": output,
                     },
                 )
-                self.assertEqual(config["compaction"]["reserved"], reserve)
+                self.assertEqual(config["compaction"]["buffer"], reserve)
                 self.assertEqual(
-                    model["options"]["reasoning_budget_tokens"],
+                    model["body"]["reasoning_budget_tokens"],
                     1024 if size == "9b" else 2048,
                 )
                 self.assert_owned_server_stopped()

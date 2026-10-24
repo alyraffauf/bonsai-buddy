@@ -11,9 +11,9 @@ current directory.
 | 9B | 131072 | 122880 | 8192 | 1024 | 114688 |
 | 27B | 16384 | 12288 | 4096 | 2048 | 8192 |
 
-Output includes reasoning, tool arguments, and the answer. Automatic compaction and
-old tool-output pruning are enabled. Large tool results can still exceed the reserve.
-See [OpenCode's compaction settings](https://opencode.ai/docs/config/#compaction).
+Output includes reasoning, tool arguments, and the answer. Automatic compaction
+keeps up to 8192 recent tokens for 9B and 4096 for 27B. Large tool results can still
+exceed the reserve. See [OpenCode's compaction settings](https://dev.opencode.ai/v2/docs/config/#compaction).
 
 ## Server ownership
 
@@ -31,4 +31,6 @@ BONSAI_BUDDY_PORT=8081 nix run .#opencode-27b
 ```
 
 Arguments after `--` go to OpenCode. `--help` and `--version` skip server startup.
-Each run uses a temporary config; your normal settings and MCP tools still load.
+Each run uses OpenCode 2 in foreground mode with a temporary config. Your normal
+settings, history, and MCP tools still load. The OpenCode process exits with the
+client, so model settings apply even when another OpenCode server is running.
