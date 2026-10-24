@@ -11,9 +11,39 @@ import urllib.error
 from pathlib import Path
 from unittest.mock import patch
 
+from cache import mutate_history
 from common import default_models_directory, running_server
 from context import EXPECTED, correct_tool_call
 from task import CodingTask
+
+
+class TranscriptTests(unittest.TestCase):
+    def test_argument_changes_preserve_values_and_leave_source_untouched(self):
+        arguments = {"path": "calc.py", "start_line": 1, "end_line": 1000}
+        messages = [
+            {},
+            {},
+            {"tool_calls": [{"function": {"arguments": json.dumps(arguments)}}]},
+        ]
+        original = json.dumps(messages)
+        for variant in ["format-arguments", "reorder-arguments"]:
+            changed = mutate_history(messages, variant)
+            encoded = changed[2]["tool_calls"][0]["function"]["arguments"]
+            self.assertEqual(json.loads(encoded), arguments)
+        self.assertEqual(json.dumps(messages), original)
+        reordered = mutate_history(messages, "reorder-arguments")
+        encoded = reordered[2]["tool_calls"][0]["function"]["arguments"]
+        self.assertEqual(list(json.loads(encoded)), list(reversed(arguments)))
+
+    def test_reasoning_removal_preserves_visible_history(self):
+        messages = [
+            {"role": "assistant", "content": "Answer", "reasoning_content": "Thought"}
+        ]
+        self.assertEqual(
+            mutate_history(messages, "strip-reasoning"),
+            [{"role": "assistant", "content": "Answer"}],
+        )
+        self.assertEqual(messages[0]["reasoning_content"], "Thought")
 
 
 class LongContextTests(unittest.TestCase):

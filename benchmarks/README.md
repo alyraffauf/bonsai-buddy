@@ -35,6 +35,7 @@ Omit `--thinking --preserve-reasoning` for the greedy baseline. The thinking tes
 output at 4096 tokens per request. Simulated tools edit an in-memory Python file;
 AST checks enforce the fix, preserved helpers, and tests after the last edit.
 The runner allows eight turns and prints `PASSED` on success. Its default port is 18083.
+Add `--warmup` to measure a warm server. The separate warmup duration stays in the result.
 
 For the original Vulkan baseline, cache `#9b-plain` and `#27b-vulkan`:
 
@@ -72,6 +73,19 @@ nix develop -c python3 benchmarks/server.py \
 These raw-runtime cases use 8K context and port 18082. Add
 `--checkpoints 32 --cache-ram 1024 --cache-prompt --code-functions 128` to test prefix
 reuse. Compare `cache_n`, `prompt_n`, and `prompt_ms` across repetitions.
+
+## Check transcript reuse
+
+```sh
+nix develop -c python3 benchmarks/cache.py --case 9b --case 27b
+```
+
+This seeded tool conversation compares stable history, removed reasoning, changed
+argument formatting, reordered keys, and cache misses. The RAM prompt store is
+disabled to isolate the live prefix. Add `--continuation user` to test a new user turn.
+
+For real-weight matvec sweeps and full-vocabulary comparisons, see
+[PQ2 kernel experiments](../docs/profiling.md#test-pq2-matvecs).
 
 ## Compare grammar cloning
 

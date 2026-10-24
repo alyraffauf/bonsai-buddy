@@ -75,6 +75,7 @@ def run_case(options, name):
         "passed": False,
         "thinking": options.thinking,
         "preserve_reasoning": options.preserve_reasoning,
+        "warmup": options.warmup,
     }
     options.output.mkdir(parents=True, exist_ok=True)
     try:
@@ -84,6 +85,28 @@ def run_case(options, name):
             options.output / f"{name}.log",
             env={**os.environ, "BONSAI_BUDDY_MODELS_DIR": str(options.models)},
         ) as base_url:
+            if options.warmup:
+                warmup_started = time.monotonic()
+                warmup = request_json(
+                    base_url,
+                    "/v1/chat/completions",
+                    {
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": "Read this Python module and reply only READY.\n\n"
+                                + task.source,
+                            }
+                        ],
+                        "temperature": 0,
+                        "max_tokens": 16,
+                        "reasoning_effort": "none",
+                        "chat_template_kwargs": {"enable_thinking": False},
+                        "cache_prompt": False,
+                    },
+                )
+                result["warmup_seconds"] = time.monotonic() - warmup_started
+                result["warmup_timings"] = warmup.get("timings", {})
             started = time.monotonic()
             for turn in range(8):
                 payload = {
@@ -174,6 +197,7 @@ def main():
     parser.add_argument("--case", action="append")
     parser.add_argument("--thinking", action="store_true")
     parser.add_argument("--preserve-reasoning", action="store_true")
+    parser.add_argument("--warmup", action="store_true")
     options = parser.parse_args()
     defaults = (
         ["9b", "27b", "9b-rewrite"]

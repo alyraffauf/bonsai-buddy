@@ -82,6 +82,19 @@ All profiles enable prompt caching. Stable system prompts, tool order, and prese
 reasoning help retain prefixes. One slot queues concurrent sessions.
 The [HTTP records](benchmarks/measurements/http.json) contain individual requests.
 
+A seeded tool conversation also tested history changes at the default capacities.
+Two reversed-order repeats disabled the RAM prompt store and measured newly processed tokens:
+
+| Model | Stable history | Reasoning removed | Argument keys reordered |
+| --- | ---: | ---: | ---: |
+| 9B | 18 to 19 | 3680 | 3745 |
+| 27B | 19 | 3712 | 3749 |
+
+Whitespace-only argument changes retained the prefix. Within a tool loop, preserve
+reasoning and argument order. For a new user turn, 9B's template drops earlier
+reasoning. Desktop VRAM forced partial CPU offload during these tests; compare token
+work, not absolute throughput. [Cache records](benchmarks/measurements/cache.json) include every repeat.
+
 ## Kernel profiling
 
 These PQ2 captures used ROCm 7.2.3, with F16 KV for 9B and Q8 for 27B.
@@ -105,6 +118,22 @@ Tracing slowed 9B decode from 81.3 to 18.5 tokens/s and 27B from 24.9 to 9.0.
 Trace gaps therefore do not prove equivalent stalls during normal inference.
 The [kernel records](benchmarks/measurements/kernels.json) include dispatch summaries,
 counters, and unprofiled controls. See the [profiling guide](docs/profiling.md).
+
+## PQ2 matvec experiments
+
+Untraced stream reads reached about 315 to 317 GB/s with 1 and 2 GiB buffers.
+A sweep tested 468 kernel configurations across 12 real tensors, with six timing
+pairs each. Grouping four rows sped up large three-token PQ2 calls by roughly
+1.3× to 2.1×. The smallest attention projections regressed and need the original kernel.
+
+Selected row grouping preserved all 47,677,440 captured logits per model.
+In an 8K HTTP ABBA test, 9B MTP generation rose from 101.5 to 105.6 tokens/s on
+prose and 115.1 to 120.0 on code, about 4%. Text and acceptance counts matched.
+The 27B single-token candidate gave no reliable gain. All 20 coding tasks passed,
+but intermittent stalls obscured latency gains, including after warmup. These are
+experimental kernels; the profiles keep the released HIP plugin.
+[Matvec records](benchmarks/measurements/matvec.json)
+contain all kernel pairs, logit hashes, HTTP samples, and coding-task repeats.
 
 ## Tuning decisions
 

@@ -6,6 +6,49 @@ as needed. These commands reproduce the PQ2 captures in the [performance report]
 The profiling shell supplies ROCm 7.2.3 and decode markers. Commands preserve an
 explicit HSA override; otherwise they use `10.3.0` for the tested RX 6700.
 
+## Test PQ2 matvecs
+
+These gfx1030 probes compare the released HIP kernel with different block sizes,
+row grouping, loop unrolling, and Prism's planar PQ2 kernel. Each reports numerical
+differences and six timing pairs over rotating real weights. Defaults stay unchanged.
+
+```sh
+export HSA_OVERRIDE_GFX_VERSION=${HSA_OVERRIDE_GFX_VERSION-10.3.0}
+models_dir=${BONSAI_BUDDY_MODELS_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bonsai-buddy/models}
+probe=$(nix build --impure --file benchmarks/matvec.nix \
+	--argstr repository "$PWD" --no-link --print-out-paths)
+"$probe/bin/bonsai-matvec-probe" bandwidth
+"$probe/bin/bonsai-matvec-probe" \
+	"$models_dir/Ternary-Bonsai-2-9B-PQ2_0.gguf" blk.0.ffn_down.weight 6
+```
+
+Pass only a model filename to list its PQ2 and Q8 tensors. Output is JSON Lines
+for measurements and plain text for tensor listings. Weights rotate over at least
+512 MiB. Reported GB/s counts weight bytes; it is not a DRAM counter.
+
+To compare all logits under one-, two-, and three-token decode batches:
+
+```sh
+runtime=$(nix build .#runtime-source --no-link --print-out-paths)
+experiment=$(nix build --impure --file benchmarks/matvec.nix \
+	--argstr repository "$PWD" --arg interpose true --no-link --print-out-paths)
+logits=$(nix build --impure --file benchmarks/logits.nix \
+	--argstr repository "$PWD" --no-link --print-out-paths)
+mkdir -p benchmarks/results
+model="$models_dir/Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf"
+"$logits/bin/bonsai-logits" "$model" "$runtime/bin" benchmarks/task.py \
+	benchmarks/results/baseline.f32 f16
+LD_PRELOAD="$experiment/lib/libbonsai-matvec.so" \
+	"$logits/bin/bonsai-logits" "$model" "$runtime/bin" benchmarks/task.py \
+	benchmarks/results/rows.f32 f16
+cmp benchmarks/results/baseline.f32 benchmarks/results/rows.f32
+```
+
+The capture writes 192 full-vocabulary rows after 256 prompt tokens. For HTTP tests,
+pass `"$experiment/bin/bonsai-matvec-server"` to `server.py` or `agent.py` with `--server`.
+`BONSAI_BUDDY_MATVEC_SINGLE=1` also tests row grouping on small single-token projections.
+The wrapper prints captured call counts on exit. No profile loads this library.
+
 ## Capture prefill and decode separately
 
 ```sh
