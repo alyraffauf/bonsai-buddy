@@ -133,10 +133,32 @@
           program = "${runtime}/bin/llama-bench";
         };
       };
+      formatter.${system} = pkgs.nixfmt;
+      checks.${system}.python =
+        pkgs.runCommand "bonsaid-python-checks"
+          {
+            nativeBuildInputs = [
+              pkgs.python3
+              pkgs.ruff
+              pkgs.ty
+            ];
+          }
+          ''
+            cp -r ${./benchmarks} benchmarks
+            cp -r ${./tests} tests
+            cp ${./pyproject.toml} pyproject.toml
+            ruff format --check benchmarks tests
+            ruff check benchmarks tests
+            ty check --extra-search-path benchmarks benchmarks tests
+            PYTHONPATH=benchmarks python3 -B -m unittest discover -s tests -v
+            touch $out
+          '';
       devShells.${system}.default = pkgs.mkShell {
         packages = [
           pkgs.python3
           pkgs.stdenv.cc
+          pkgs.ruff
+          pkgs.ty
         ];
         BONSAID_INCLUDE = "${sourceRuntime.dev}/include";
         BONSAID_RELEASE_LIB = "${rocmRuntime}/lib/bonsai2";

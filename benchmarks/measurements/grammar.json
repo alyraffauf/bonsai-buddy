@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-23",
+  "warmup_clones": 10,
+  "records": {
+    "release": {
+      "clones": 100,
+      "grammar_bytes": 180764,
+      "milliseconds_per_clone": 1.27143
+    },
+    "source": {
+      "clones": 100,
+      "grammar_bytes": 180764,
+      "milliseconds_per_clone": 0.0893939
+    }
+  }
+}

@@ -2,110 +2,20 @@
 
 import argparse
 import json
-import os
-import signal
-import subprocess
 import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 
-
-def request_json(base_url, path, payload=None):
-    data = None if payload is None else json.dumps(payload).encode()
-    request = urllib.request.Request(
-        base_url + path, data=data, headers={"Content-Type": "application/json"}
-    )
-    with urllib.request.urlopen(request, timeout=180) as response:
-        return json.load(response)
-
-
-def profiles(models):
-    nine = str(models / "Ternary-Bonsai-2-9B-PQ2_0.gguf")
-    twenty_seven = str(models / "Ternary-Bonsai-2-27B-PQ2_0.gguf")
-    ptq = str(models / "Ternary-Bonsai-2-27B-PTQ1_0.gguf")
-    return {
-        "9b-plain": ["--model", nine],
-        "9b-ptq": ["--model", str(models / "Ternary-Bonsai-2-9B-PTQ1_0.gguf")],
-        "9b-mtp1": [
-            "--model",
-            str(models / "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf"),
-            "--spec-type",
-            "draft-mtp",
-            "--spec-draft-n-max",
-            "1",
-            "--spec-draft-p-min",
-            "0",
-        ],
-        "9b-mtp2": [
-            "--model",
-            str(models / "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf"),
-            "--spec-type",
-            "draft-mtp",
-            "--spec-draft-n-max",
-            "2",
-            "--spec-draft-p-min",
-            "0",
-        ],
-        "9b-mtp4": [
-            "--model",
-            str(models / "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf"),
-            "--spec-type",
-            "draft-mtp",
-            "--spec-draft-n-max",
-            "4",
-            "--spec-draft-p-min",
-            "0",
-        ],
-        "9b-dflash": [
-            "--model",
-            nine,
-            "--model-draft",
-            str(models / "Ternary-Bonsai-2-9B-DFlash2-Q8_0.gguf"),
-            "--spec-type",
-            "draft-dflash",
-            "--spec-draft-n-max",
-            "16",
-        ],
-        "9b-ngram": ["--model", nine, "--spec-type", "ngram-mod"],
-        "9b-ngram-tuned": [
-            "--model",
-            nine,
-            "--spec-type",
-            "ngram-simple",
-            "--spec-ngram-simple-size-n",
-            "8",
-            "--spec-ngram-simple-size-m",
-            "32",
-        ],
-        "27b-plain": ["--model", twenty_seven],
-        "27b-ptq": ["--model", ptq],
-        "27b-ngram": ["--model", twenty_seven, "--spec-type", "ngram-mod"],
-        "27b-ngram-tuned": [
-            "--model",
-            twenty_seven,
-            "--spec-type",
-            "ngram-simple",
-            "--spec-ngram-simple-size-n",
-            "8",
-            "--spec-ngram-simple-size-m",
-            "32",
-        ],
-        "27b-draft2b": [
-            "--model",
-            ptq,
-            "--model-draft",
-            str(models / "Ternary-Bonsai-2-2B-PQ2_0.gguf"),
-            "--spec-type",
-            "draft-simple",
-            "--spec-draft-n-max",
-            "4",
-        ],
-    }
+from common import (
+    default_models_directory,
+    port_number,
+    positive_integer,
+    request_json,
+    running_server,
+)
+from profiles import profiles
 
 
 def run_profile(options, name, arguments):
-    base_url = f"http://127.0.0.1:{options.port}"
     command = [
         options.server,
         *arguments,
@@ -145,26 +55,13 @@ def run_profile(options, name, arguments):
         ]
     result = {"profile": name, "command": command, "requests": []}
     options.output.mkdir(parents=True, exist_ok=True)
-    with (options.output / f"{name}.log").open("w") as log:
-        process = subprocess.Popen(
-            command, stdout=log, stderr=log, start_new_session=True
-        )
-        try:
-            for attempt in range(120):
-                if process.poll() is not None:
-                    raise RuntimeError(
-                        f"Server exited with status {process.returncode}"
-                    )
-                try:
-                    if request_json(base_url, "/health").get("status") == "ok":
-                        break
-                except (urllib.error.URLError, TimeoutError):
-                    pass
-                time.sleep(1)
-            else:
-                raise TimeoutError("Server startup exceeded 120 seconds")
+    try:
+        with running_server(
+            command, options.port, options.output / f"{name}.log"
+        ) as base_url:
             loaded = request_json(base_url, "/props")["model_path"]
-            if loaded != arguments[arguments.index("--model") + 1]:
+            expected = arguments[arguments.index("--model") + 1]
+            if Path(loaded).resolve() != Path(expected).resolve():
                 raise RuntimeError(f"Wrong model on benchmark port: {loaded}")
 
             def chat(prompt, max_tokens):
@@ -183,7 +80,7 @@ def run_profile(options, name, arguments):
 
             check = chat("What is 17 times 23? Reply only with the number.", 32)
             answer = check["choices"][0]["message"].get("content", "")
-            if "391" not in answer:
+            if answer.strip() != "391":
                 raise RuntimeError(f"Arithmetic check failed: {answer!r}")
             code = "\n\n".join(
                 f"def transform_{index}(items):\n    return [item * {index + 1} for item in items if item is not None]"
@@ -208,44 +105,46 @@ def run_profile(options, name, arguments):
                     }
                     result["requests"].append(row)
                     print(name, workload, repetition, row["timings"], flush=True)
-        except (RuntimeError, TimeoutError, urllib.error.URLError) as error:
-            result["error"] = str(error)
-            print(name, "FAILED", error, flush=True)
-        finally:
-            if process.poll() is None:
-                os.killpg(process.pid, signal.SIGINT)
-                try:
-                    process.wait(timeout=30)
-                except subprocess.TimeoutExpired:
-                    os.killpg(process.pid, signal.SIGKILL)
-                    process.wait()
+    except (
+        OSError,
+        RuntimeError,
+        ValueError,
+        KeyError,
+        IndexError,
+        TypeError,
+    ) as error:
+        result["error"] = str(error)
+        print(name, "FAILED", error, flush=True)
     (options.output / f"{name}.json").write_text(json.dumps(result, indent=2) + "\n")
+    return "error" not in result
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--server", required=True)
-    parser.add_argument(
-        "--models", type=Path, default=Path.home() / ".cache/bonsaid/models"
-    )
+    parser.add_argument("--models", type=Path, default=default_models_directory())
     parser.add_argument("--output", type=Path, default=Path("benchmarks/results/api"))
-    parser.add_argument("--port", type=int, default=18082)
-    parser.add_argument("--tokens", type=int, default=192)
-    parser.add_argument("--repetitions", type=int, default=2)
-    parser.add_argument("--context", type=int, default=8192)
+    parser.add_argument("--port", type=port_number, default=18082)
+    parser.add_argument("--tokens", type=positive_integer, default=192)
+    parser.add_argument("--repetitions", type=positive_integer, default=2)
+    parser.add_argument("--context", type=positive_integer, default=8192)
     parser.add_argument("--checkpoints", type=int, default=0)
     parser.add_argument("--cache-ram", type=int, default=0)
     parser.add_argument("--cache-prompt", action="store_true")
-    parser.add_argument("--code-functions", type=int, default=24)
+    parser.add_argument("--code-functions", type=positive_integer, default=24)
     parser.add_argument("--kv-type", choices=["f16", "q8_0", "q4_0"])
     parser.add_argument("--case", action="append")
     options = parser.parse_args()
     available = profiles(options.models)
-    for name in options.case or available:
+    names = options.case or list(available)
+    for name in names:
         if name not in available:
             parser.error(f"Unknown case {name!r}")
-        run_profile(options, name, available[name])
+    results = []
+    for name in names:
+        results.append(run_profile(options, name, available[name]))
+    return 0 if all(results) else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

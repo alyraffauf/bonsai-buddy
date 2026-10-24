@@ -1,52 +1,20 @@
 """Exercise cached read/edit/test tool loops against local model profiles."""
 
 import argparse
-import ast
 import json
 import os
-import signal
-import subprocess
 import time
-import urllib.error
 from pathlib import Path
 
-from server import profiles, request_json
-
-
-def tool(name, description, properties):
-    return {
-        "type": "function",
-        "function": {
-            "name": name,
-            "description": description,
-            "parameters": {
-                "type": "object",
-                "properties": properties,
-                "required": list(properties),
-                "additionalProperties": False,
-            },
-        },
-    }
-
-
-def has_correct_add(source):
-    try:
-        tree = ast.parse(source)
-    except SyntaxError:
-        return False
-    for node in tree.body:
-        if isinstance(node, ast.FunctionDef) and node.name == "add":
-            return any(
-                isinstance(value, ast.Return)
-                and isinstance(value.value, ast.BinOp)
-                and isinstance(value.value.op, ast.Add)
-                and isinstance(value.value.left, ast.Name)
-                and value.value.left.id == "a"
-                and isinstance(value.value.right, ast.Name)
-                and value.value.right.id == "b"
-                for value in node.body
-            )
-    return False
+from common import (
+    default_models_directory,
+    port_number,
+    positive_integer,
+    request_json,
+    running_server,
+)
+from profiles import profiles
+from task import TOOLS, CodingTask
 
 
 def run_case(options, name):
@@ -89,26 +57,7 @@ def run_case(options, name):
             "--no-mmproj",
             "--no-webui",
         ]
-    base_url = f"http://127.0.0.1:{options.port}"
-    source = "def add(a, b):\n    return a - b\n\n" + "\n\n".join(
-        f"def helper_{index}(items):\n    return [item * {index + 1} for item in items if item is not None]"
-        for index in range(128)
-    )
-    tools = [
-        tool(
-            "read_file", "Read a file before editing it.", {"path": {"type": "string"}}
-        ),
-        tool(
-            "replace_text",
-            "Replace exact text in a file.",
-            {
-                "path": {"type": "string"},
-                "old_text": {"type": "string"},
-                "new_text": {"type": "string"},
-            },
-        ),
-        tool("run_tests", "Run the unit tests.", {}),
-    ]
+    task = CodingTask()
     messages = [
         {
             "role": "system",
@@ -127,30 +76,19 @@ def run_case(options, name):
         "thinking": options.thinking,
         "preserve_reasoning": options.preserve_reasoning,
     }
-    read_file = False
-    tests_passed = False
     options.output.mkdir(parents=True, exist_ok=True)
-    with (options.output / f"{name}.log").open("w") as log:
-        process = subprocess.Popen(
-            command, stdout=log, stderr=log, start_new_session=True
-        )
-        try:
-            for attempt in range(120):
-                if process.poll() is not None:
-                    raise RuntimeError(f"Server exited: {process.returncode}")
-                try:
-                    if request_json(base_url, "/health").get("status") == "ok":
-                        break
-                except (urllib.error.URLError, TimeoutError):
-                    pass
-                time.sleep(1)
-            else:
-                raise TimeoutError("Server did not start")
+    try:
+        with running_server(
+            command,
+            options.port,
+            options.output / f"{name}.log",
+            env={**os.environ, "BONSAI_MODELS_DIR": str(options.models)},
+        ) as base_url:
             started = time.monotonic()
             for turn in range(8):
                 payload = {
                     "messages": messages,
-                    "tools": tools,
+                    "tools": TOOLS,
                     "temperature": 1.0 if options.thinking else 0,
                     "max_tokens": 4096 if options.thinking else 512,
                     "cache_prompt": True,
@@ -187,58 +125,31 @@ def run_case(options, name):
                     }
                 )
                 if not calls:
-                    result["passed"] = (
-                        read_file and tests_passed and has_correct_add(source)
-                    )
+                    result["passed"] = task.passed
                     break
                 for call in calls:
                     function = call["function"]["name"]
                     parameters = call["function"]["arguments"]
                     if isinstance(parameters, str):
                         parameters = json.loads(parameters)
-                    if function == "read_file" and parameters.get("path") == "calc.py":
-                        read_file = True
-                        output = source
-                    elif (
-                        function == "replace_text"
-                        and read_file
-                        and parameters.get("path") == "calc.py"
-                    ):
-                        old = parameters["old_text"]
-                        if old not in source:
-                            output = "Error: old_text was not found."
-                        else:
-                            source = source.replace(old, parameters["new_text"], 1)
-                            output = "Replacement applied."
-                    elif function == "run_tests":
-                        tests_passed = has_correct_add(source)
-                        output = (
-                            "All tests passed."
-                            if tests_passed
-                            else "FAIL: add(17, 23) must return 40."
-                        )
-                    else:
-                        output = "Error: invalid call. Read calc.py before editing."
+                    output = task.call(function, parameters)
                     messages.append(
                         {"role": "tool", "tool_call_id": call["id"], "content": output}
                     )
             result["wall_seconds"] = time.monotonic() - started
-        except (
-            RuntimeError,
-            TimeoutError,
-            urllib.error.URLError,
-            ValueError,
-            KeyError,
-        ) as error:
-            result["error"] = str(error)
-        finally:
-            if process.poll() is None:
-                os.killpg(process.pid, signal.SIGINT)
-                try:
-                    process.wait(timeout=30)
-                except subprocess.TimeoutExpired:
-                    os.killpg(process.pid, signal.SIGKILL)
-                    process.wait()
+            if not result["passed"]:
+                result["error"] = (
+                    "Agent did not finish with a verified fix within eight turns"
+                )
+    except (
+        OSError,
+        RuntimeError,
+        ValueError,
+        KeyError,
+        IndexError,
+        TypeError,
+    ) as error:
+        result["error"] = str(error)
     (options.output / f"{name}.json").write_text(json.dumps(result, indent=2) + "\n")
     print(
         name,
@@ -246,6 +157,7 @@ def run_case(options, name):
         result.get("error", ""),
         flush=True,
     )
+    return result["passed"]
 
 
 def main():
@@ -253,26 +165,40 @@ def main():
     launcher = parser.add_mutually_exclusive_group(required=True)
     launcher.add_argument("--server")
     launcher.add_argument("--flake")
-    parser.add_argument(
-        "--models", type=Path, default=Path.home() / ".cache/bonsaid/models"
-    )
+    parser.add_argument("--models", type=Path, default=default_models_directory())
     parser.add_argument("--output", type=Path, default=Path("benchmarks/results/agent"))
-    parser.add_argument("--context", type=int, default=8192)
-    parser.add_argument("--port", type=int, default=18083)
-    parser.add_argument("--batch-size", type=int, default=1024)
-    parser.add_argument("--ubatch-size", type=int, default=256)
+    parser.add_argument("--context", type=positive_integer, default=8192)
+    parser.add_argument("--port", type=port_number, default=18083)
+    parser.add_argument("--batch-size", type=positive_integer, default=1024)
+    parser.add_argument("--ubatch-size", type=positive_integer, default=256)
     parser.add_argument("--case", action="append")
     parser.add_argument("--thinking", action="store_true")
     parser.add_argument("--preserve-reasoning", action="store_true")
     options = parser.parse_args()
     defaults = (
-        ["9b", "27b", "9b-rewrite", "27b-prefill"]
+        ["9b", "27b", "9b-rewrite"]
         if options.flake
         else ["9b-plain", "9b-mtp1", "9b-dflash", "27b-ptq", "27b-plain"]
     )
-    for name in options.case or defaults:
-        run_case(options, name)
+    names = options.case or defaults
+    available = (
+        {
+            "9b",
+            "27b",
+            "9b-plain",
+            "9b-rewrite",
+            "9b-vulkan",
+            "27b-vulkan",
+        }
+        if options.flake
+        else profiles(options.models)
+    )
+    for name in names:
+        if name not in available:
+            parser.error(f"Unknown case {name!r}")
+    results = [run_case(options, name) for name in names]
+    return 0 if all(results) else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

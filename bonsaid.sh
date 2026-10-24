@@ -69,10 +69,10 @@ if [[ ! "$fit_target" =~ ^[0-9]+$ ]]; then
   exit 2
 fi
 # HIP reports memory available to its allocator without subtracting desktop VRAM.
-# Account for that usage on this workstation's single AMD GPU before fitting.
+# On single-GPU systems, account for physical usage before fitting the model.
 vram_usage_files=(/sys/class/drm/card[0-9]*/device/mem_info_vram_used)
 if [[ "$runtime_backend" == rocm && ${#vram_usage_files[@]} -eq 1 && -r "${vram_usage_files[0]}" ]]; then
-  if desktop_vram_mb=$(HSA_OVERRIDE_GFX_VERSION="${HSA_OVERRIDE_GFX_VERSION:-10.3.0}" \
+  if desktop_vram_mb=$(HSA_OVERRIDE_GFX_VERSION="${HSA_OVERRIDE_GFX_VERSION-10.3.0}" \
       @vramHelper@ @hipLibrary@ "${vram_usage_files[0]}") && [[ "$desktop_vram_mb" =~ ^[0-9]+$ ]]; then
     fit_target=$((fit_target + desktop_vram_mb))
   else

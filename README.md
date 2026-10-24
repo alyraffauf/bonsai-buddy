@@ -1,69 +1,93 @@
-# Run Bonsai 2 locally
+# bonsaid
 
-Run either model in your terminal:
+Run Prism's Bonsai 2 9B and 27B models with Nix. Each profile starts a foreground
+server with a web UI and an OpenAI-compatible API.
 
-```sh
-nix run ~/src/bonsaid#9b
-nix run ~/src/bonsaid#27b
-```
+The defaults target coding agents on a Radeon RX 6700 with 10 GB of VRAM.
+They combine ROCm, prompt caching, and a pinned Prism runtime with faster tool-grammar
+handling. The 9B profile also uses multi-token prediction, or MTP, to accelerate generation.
 
-Open http://localhost:8080. Press Ctrl+C to stop the server.
-Plain `nix run ~/src/bonsaid` selects 9B.
+## Measured improvements
 
-These profiles target the Radeon RX 6700 with 10 GB VRAM on x86_64 Linux.
-They use ROCm with `HSA_OVERRIDE_GFX_VERSION=10.3.0`, matching Hoenn's Petalburg configuration.
-The runtime includes pinned upstream fixes for agent tool grammars and malformed input.
-The first build compiles the server and web UI. Nix caches later runs.
+On the RX 6700, the tuned profiles completed a synthetic read/edit/test loop faster
+than the initial Vulkan configuration:
 
-| App | Context | Packing and decoding | Use |
-| --- | ---: | --- | --- |
-| `#9b` | 64K | PQ2_0 with MTP depth 1, F16 KV | Default for coding agents |
-| `#27b` | 32K | PTQ1_0, Q8 KV | Larger model with room for agent history |
-| `#9b-plain` | 64K | PQ2_0, F16 KV | 9B without speculative decoding |
-| `#9b-rewrite` | 8K | PQ2_0 with DFlash2, F16 KV | Cached, repetitive code rewrites |
-| `#27b-prefill` | 8K | PQ2_0, Q8 KV | Faster cold prompts with a shorter context |
+| Model and profile | Vulkan baseline | Tuned profile | Speedup | Configured context |
+| --- | ---: | ---: | ---: | ---: |
+| 9B, `#9b` | 21.91 s | 7.05 s | 3.1× | 8K to 64K |
+| 27B, `#27b` | 45.29 s | 22.70 s | 2.0× | 8K to 16K |
 
-`#9b-vulkan` and `#27b-vulkan` provide the release's Vulkan backend as alternatives.
-They use 32K and 8K contexts respectively.
+These are individual runs of a small coding task, with greedy sampling and thinking
+disabled. Model loading is excluded. The task uses about 3500 tokens of source code;
+the context column describes capacity, not a full-context test.
 
-All apps run in the foreground. They cache model files in
-`${XDG_CACHE_HOME:-$HOME/.cache}/bonsaid/models` and verify new downloads with SHA-256.
-Run one model at a time for the measured performance on this GPU.
+The shipped defaults keep thinking enabled with a 1024-token budget. Thinking can
+change the number of tool calls and total latency. These measurements describe
+latency on one machine, not general coding quality. The selected 27B profile passed
+three thinking-enabled runs in 32.0 to 65.2 s, with a median of 34.3 s.
 
-The OpenAI-compatible API is at http://localhost:8080/v1.
-Use model name `bonsai2:9b` or `bonsai2:27b`, matching the selected size.
-Enable history compaction in your agent and configure its context limit to match the profile.
+See the [performance report](PERFORMANCE.md) for inference rates, cache measurements,
+tradeoffs, and the [measurement records](benchmarks/measurements/agent.json).
 
-Thinking defaults to 1024 tokens. Main profiles allow up to 8192 total output tokens;
-the short 8K profiles allow 4096. Clients can override these defaults per request.
-At the thinking limit, a short transition message prompts the answer or next tool call.
-If thinking is enabled, leave room for both reasoning and the final answer in the client's output limit.
-The 27B profile maps unsupported reasoning-effort values such as `high` to `medium`.
-If your agent supports it, preserve `reasoning_content` on previous assistant messages
-when sending tool results. This keeps more of the conversation prefix reusable.
+## Run a model
 
-To change defaults, set these environment variables:
+Use x86_64 Linux with Nix and flakes enabled. The ROCm profiles require access to the
+AMD GPU through the host driver. The tested machine has 32 GB of RAM and a Ryzen 5 5600X;
+the source runtime requires AVX2, FMA, and F16C.
 
-| Variable | Default |
-| --- | --- |
-| `BONSAI_PORT` | `8080` |
-| `BONSAI_CTX` | Profile context |
-| `BONSAI_KV_TYPE` | Profile KV type |
-| `BONSAI_THINK_TOKENS` | `1024` |
-| `BONSAI_MAX_TOKENS` | Profile output limit |
-| `BONSAI_CACHE_MB` | `1024` MiB of host prompt-cache storage |
-| `BONSAI_GPU_RESERVE_MB` | `512` MiB for 9B, `256` MiB for 27B, beyond desktop VRAM |
-| `BONSAI_MODELS_DIR` | Model-cache path above |
-
-For example:
+From the repository root, choose one model:
 
 ```sh
-BONSAI_PORT=8081 nix run ~/src/bonsaid#9b
-BONSAI_THINK_TOKENS=4096 nix run ~/src/bonsaid#9b
+nix run .#9b
 ```
 
-Arguments after `--` pass to llama-server. The vision projector runs on the CPU to reserve VRAM for agent context.
-Large images are downscaled to 1024 vision tokens; pass `--image-max-tokens 4096` for more detail.
+```sh
+nix run .#27b
+```
 
-Read [the measurements and tuning decisions](PERFORMANCE.md) for benchmark results,
-tradeoffs, and commands to repeat the tests.
+Open [the web UI](http://localhost:8080). Press Ctrl+C to stop the server.
+Plain `nix run` selects 9B. Run one model at a time on the tested 10 GB GPU.
+
+The first run builds the server and web UI, then downloads and verifies the model
+files. Later runs reuse the Nix store and model cache. The launcher runs in your
+terminal and requires no system service.
+
+## Connect an agent
+
+Set your client's base URL to `http://localhost:8080/v1` and its model to
+`bonsai2:9b` or `bonsai2:27b`. Match the client's context limit to the selected profile
+and enable history compaction.
+
+The main profiles provide 64K context for 9B and 16K for 27B, with an 8192-token output
+limit. Thinking uses at most 1024 generated tokens by default, followed by a short
+transition to the answer or next tool call. Leave room for both in the client's output limit.
+Clients can override generation settings per request.
+
+The default ROCm override is `HSA_OVERRIDE_GFX_VERSION=10.3.0`. To supply another value,
+set the standard ROCm variable when you run the model:
+
+```sh
+HSA_OVERRIDE_GFX_VERSION=10.3.0 nix run .#9b
+```
+
+See [configuration](docs/configuration.md) for all profiles, cache paths, environment
+variables, Vulkan alternatives, and settings for other GPUs.
+
+## Develop and benchmark
+
+Run the automated checks:
+
+```sh
+nix flake check
+```
+
+Follow [the benchmark guide](benchmarks/README.md) to measure inference or run the
+simulated agent task. The Python tools use only the standard library.
+
+## License and upstream projects
+
+The launcher, Nix definitions, benchmark tools, and documentation use the [MIT license](LICENSE).
+The runtime comes from [Prism's llama.cpp fork](https://github.com/PrismML-Eng/llama.cpp).
+Model weights come from Prism's [9B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-9B-gguf)
+and [27B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) repositories.
+Runtime dependencies and model weights retain their upstream licenses.

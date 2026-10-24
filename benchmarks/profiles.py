@@ -1,0 +1,85 @@
+"""Raw inference configurations used by the HTTP benchmarks."""
+
+
+def profiles(models):
+    nine = str(models / "Ternary-Bonsai-2-9B-PQ2_0.gguf")
+    twenty_seven = str(models / "Ternary-Bonsai-2-27B-PQ2_0.gguf")
+    ptq = str(models / "Ternary-Bonsai-2-27B-PTQ1_0.gguf")
+    return {
+        "9b-plain": ["--model", nine],
+        "9b-ptq": ["--model", str(models / "Ternary-Bonsai-2-9B-PTQ1_0.gguf")],
+        "9b-mtp1": [
+            "--model",
+            str(models / "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf"),
+            "--spec-type",
+            "draft-mtp",
+            "--spec-draft-n-max",
+            "1",
+            "--spec-draft-p-min",
+            "0",
+        ],
+        "9b-mtp2": [
+            "--model",
+            str(models / "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf"),
+            "--spec-type",
+            "draft-mtp",
+            "--spec-draft-n-max",
+            "2",
+            "--spec-draft-p-min",
+            "0",
+        ],
+        "9b-mtp4": [
+            "--model",
+            str(models / "Ternary-Bonsai-2-9B-PQ2_0-MTP-Q8_0.gguf"),
+            "--spec-type",
+            "draft-mtp",
+            "--spec-draft-n-max",
+            "4",
+            "--spec-draft-p-min",
+            "0",
+        ],
+        "9b-dflash": [
+            "--model",
+            nine,
+            "--model-draft",
+            str(models / "Ternary-Bonsai-2-9B-DFlash2-Q8_0.gguf"),
+            "--spec-type",
+            "draft-dflash",
+            "--spec-draft-n-max",
+            "16",
+        ],
+        "9b-ngram": ["--model", nine, "--spec-type", "ngram-mod"],
+        "9b-ngram-tuned": [
+            "--model",
+            nine,
+            "--spec-type",
+            "ngram-simple",
+            "--spec-ngram-simple-size-n",
+            "8",
+            "--spec-ngram-simple-size-m",
+            "32",
+        ],
+        "27b-plain": ["--model", twenty_seven],
+        "27b-ptq": ["--model", ptq],
+        "27b-ngram": ["--model", twenty_seven, "--spec-type", "ngram-mod"],
+        "27b-ngram-tuned": [
+            "--model",
+            twenty_seven,
+            "--spec-type",
+            "ngram-simple",
+            "--spec-ngram-simple-size-n",
+            "8",
+            "--spec-ngram-simple-size-m",
+            "32",
+        ],
+        "27b-draft2b": [
+            "--model",
+            ptq,
+            "--model-draft",
+            str(models / "Ternary-Bonsai-2-2B-PQ2_0.gguf"),
+            "--spec-type",
+            "draft-simple",
+            "--spec-draft-n-max",
+            "4",
+        ],
+    }

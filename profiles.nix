@@ -30,10 +30,10 @@ let
   };
   twentySeven = {
     modelSize = "27b";
-    modelFile = "Ternary-Bonsai-2-27B-PTQ1_0.gguf";
-    modelSha256 = "53107f530aa52eb00912263ab1ee29bd199261c87cd7b4ad4ca1318c1fe33ee3";
+    modelFile = "Ternary-Bonsai-2-27B-PQ2_0.gguf";
+    modelSha256 = "3907dc1658db1f78a9826bf8d5bcb8dc65db0d466388937af57f2294fae62ec1";
     backend = "rocm";
-    contextTokens = "32768";
+    contextTokens = "16384";
     kvType = "q8_0";
     batchSize = "1024";
     ubatchSize = "256";
@@ -66,13 +66,9 @@ in
     contextTokens = "32768";
   };
   "27b" = twentySeven;
-  "27b-prefill" = twentySeven // {
-    modelFile = "Ternary-Bonsai-2-27B-PQ2_0.gguf";
-    modelSha256 = "3907dc1658db1f78a9826bf8d5bcb8dc65db0d466388937af57f2294fae62ec1";
-    contextTokens = "8192";
-    maxTokens = "4096";
-  };
   "27b-vulkan" = twentySeven // {
+    modelFile = "Ternary-Bonsai-2-27B-PTQ1_0.gguf";
+    modelSha256 = "53107f530aa52eb00912263ab1ee29bd199261c87cd7b4ad4ca1318c1fe33ee3";
     backend = "vulkan";
     contextTokens = "8192";
     kvType = "f16";
