@@ -18,6 +18,9 @@ Open the [web UI](http://localhost:8080). Ctrl+C stops the server. The first run
 builds the runtime and downloads verified weights; later runs reuse the cache.
 Run one GPU model at a time. `nix run` selects 9B.
 
+Downloads for the default profiles are about 3.3 GB for 9B and 7.8 GB for 27B,
+including the vision projector. The runtime build needs additional disk space.
+
 OpenCode starts a server when needed and stops servers it owns on exit.
 See [client limits](docs/clients.md) for compaction and server reuse.
 
@@ -39,10 +42,13 @@ on one machine, not general coding quality. Thinking-enabled runs also passed.
 The [performance report](PERFORMANCE.md) includes methods, context tradeoffs,
 kernel findings, and JSON records. Use the [benchmark guide](benchmarks/README.md)
 to repeat the tests. Run `nix flake check` for Ruff, ty, and regression tests.
+See [contributing](CONTRIBUTING.md) for development checks.
 
 ## License
 
-[MIT](LICENSE) covers this repository. The [Prism runtime](https://github.com/PrismML-Eng/llama.cpp)
-and [9B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-9B-gguf) and
-[27B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) weights retain their
-upstream licenses.
+[MIT](LICENSE) covers this repository. The [Prism runtime](https://github.com/PrismML-Eng/llama.cpp/blob/b87ca7225456b06b0975b8239c66b5aecf07e37c/LICENSE)
+is also MIT-licensed. The
+[9B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-9B-gguf/blob/5b2abb02362efbed46bbe204014b02837778b2c2/LICENSE)
+and [27B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf/blob/b072e1d3b35a0a630cece372c2127528e0994386/LICENSE)
+weights use Apache-2.0. Weights are downloaded separately.
+See [upstream notices](NOTICE) for the kernel experiments.

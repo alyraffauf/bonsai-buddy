@@ -3,3 +3,9 @@
 /benchmarks/results/
 /.rocprofv3/
 __pycache__/
+/dist/
+*.gguf
+*.f32
+*.so
+core
+core.*

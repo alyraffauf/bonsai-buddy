@@ -1,6 +1,7 @@
 let
   nine = {
     modelSize = "9b";
+    modelRevision = "5b2abb02362efbed46bbe204014b02837778b2c2";
     modelFile = "Ternary-Bonsai-2-9B-PQ2_0.gguf";
     modelSha256 = "7a89ab48f5038c704480f60781f9b8d4035351f5f6beb7d11fad80001fde23f9";
     backend = "rocm";
@@ -31,6 +32,7 @@ let
   };
   twentySeven = {
     modelSize = "27b";
+    modelRevision = "b072e1d3b35a0a630cece372c2127528e0994386";
     modelFile = "Ternary-Bonsai-2-27B-PQ2_0.gguf";
     modelSha256 = "3907dc1658db1f78a9826bf8d5bcb8dc65db0d466388937af57f2294fae62ec1";
     backend = "rocm";

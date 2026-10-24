@@ -28,7 +28,7 @@ model_sha256="@modelSha256@"
 draft_file="@draftFile@"
 speculative_arguments=( @extraArgs@ )
 model_directory="${BONSAI_BUDDY_MODELS_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bonsai-buddy/models}"
-model_repository="https://huggingface.co/prism-ml/$model_name-gguf/resolve/main"
+model_repository="https://huggingface.co/prism-ml/$model_name-gguf/resolve/@modelRevision@"
 projector_file="$model_name-mmproj-Q8_0.gguf"
 mkdir -p "$model_directory"
 

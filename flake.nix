@@ -229,6 +229,7 @@
             cp -r ${./tests} tests
             cp ${./pyproject.toml} pyproject.toml
             cp ${./client.sh} client.sh
+            cp ${./bonsai-buddy.sh} bonsai-buddy.sh
             ruff format --check benchmarks tests
             ruff check benchmarks tests
             ty check --extra-search-path benchmarks benchmarks tests

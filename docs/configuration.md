@@ -48,8 +48,9 @@ The first nonempty setting wins:
 2. `$XDG_CACHE_HOME/bonsai-buddy/models`.
 3. `$HOME/.cache/bonsai-buddy/models`.
 
-The launcher verifies new downloads against pinned SHA-256 checksums before moving
-them into the cache. It reuses nonempty cached files without rehashing.
+Model revisions and SHA-256 checksums are pinned in [profiles.nix](../profiles.nix).
+The launcher verifies new downloads before moving them into the cache. It reuses
+nonempty cached files without rehashing.
 
 ## API behavior
 
